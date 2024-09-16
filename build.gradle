@@ -5,7 +5,11 @@ plugins {
 }
 
 group = 'team.gokiyeonmin'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
+
+bootJar {
+    archiveFileName = 'app.jar'
+}
 
 java {
     toolchain {

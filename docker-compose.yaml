@@ -1,0 +1,21 @@
+services:
+  mysql:
+    container_name: homes_mysql
+    image: mysql:8.0.39
+    expose:
+      - "3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      MYSQL_DATABASE: ${SPRING_DATASOURCE_DATABASE}
+    volumes:
+      - ./mysql:/var/lib/mysql
+
+  spring:
+    container_name: homes_spring
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      MODE: prod
