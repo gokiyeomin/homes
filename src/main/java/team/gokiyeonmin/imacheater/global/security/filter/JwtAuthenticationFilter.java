@@ -13,7 +13,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import team.gokiyeonmin.imacheater.domain.user.Role;
 import team.gokiyeonmin.imacheater.global.jwt.JwtConstant;
 import team.gokiyeonmin.imacheater.global.jwt.JwtUtil;
-import team.gokiyeonmin.imacheater.global.security.domain.CustomUserDetails;
+import team.gokiyeonmin.imacheater.global.security.domain.CustomUserDetail;
 import team.gokiyeonmin.imacheater.global.security.domain.SecurityConstant;
 import team.gokiyeonmin.imacheater.global.security.service.CustomUserDetailService;
 
@@ -41,12 +41,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String username = claims.get(JwtConstant.USERNAME, String.class);
         List<Role> roles = claims.get(JwtConstant.ROLES, List.class);
 
-        CustomUserDetails customUserDetails = customUserDetailService.loadUserByUsername(username);
+        CustomUserDetail customUserDetail = customUserDetailService.loadUserByUsername(username);
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                customUserDetails,
+                customUserDetail,
                 null,
-                customUserDetails.getAuthorities());
+                customUserDetail.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         filterChain.doFilter(request, response);

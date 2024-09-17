@@ -12,11 +12,11 @@ import java.util.Collection;
 import java.util.List;
 
 @Getter
-public class CustomUserDetails implements UserDetails {
+public class CustomUserDetail implements UserDetails {
 
     private final CustomUserDetailInfo customUserDetailInfo;
 
-    public CustomUserDetails(User user) {
+    public CustomUserDetail(User user) {
         this.customUserDetailInfo = new CustomUserDetailInfo(
                 user.getId(),
                 user.getUsername(),
@@ -39,14 +39,22 @@ public class CustomUserDetails implements UserDetails {
         return customUserDetailInfo.id;
     }
 
-    @Override
-    public String getPassword() {
-        return customUserDetailInfo.password;
+    public String getNickname() {
+        return customUserDetailInfo.nickname;
     }
 
     @Override
     public String getUsername() {
         return customUserDetailInfo.username;
+    }
+
+    @Override
+    public String getPassword() {
+        return customUserDetailInfo.password;
+    }
+
+    public String getDepartment() {
+        return customUserDetailInfo.department;
     }
 
     private record CustomUserDetailInfo(

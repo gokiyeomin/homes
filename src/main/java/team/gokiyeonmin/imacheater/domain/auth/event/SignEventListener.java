@@ -31,7 +31,7 @@ public class SignEventListener {
 
     @EventListener
     public void signIn(SignInEvent event) {
-        User user = userService.signIn(event);
+        User user = userService.getUser(event);
         UserContextHolder.set(user);
     }
 }

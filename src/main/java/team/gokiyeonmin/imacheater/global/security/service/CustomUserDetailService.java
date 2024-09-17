@@ -9,7 +9,7 @@ import team.gokiyeonmin.imacheater.domain.user.entity.User;
 import team.gokiyeonmin.imacheater.domain.user.repository.UserRepository;
 import team.gokiyeonmin.imacheater.global.exception.BusinessException;
 import team.gokiyeonmin.imacheater.global.exception.ErrorCode;
-import team.gokiyeonmin.imacheater.global.security.domain.CustomUserDetails;
+import team.gokiyeonmin.imacheater.global.security.domain.CustomUserDetail;
 
 @Service
 @Transactional(readOnly = true)
@@ -19,10 +19,10 @@ public class CustomUserDetailService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public CustomUserDetail loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
 
-        return new CustomUserDetails(user);
+        return new CustomUserDetail(user);
     }
 }

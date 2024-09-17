@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.gokiyeonmin.imacheater.domain.auth.event.SignInEvent;
 import team.gokiyeonmin.imacheater.domain.auth.event.SignUpEvent;
+import team.gokiyeonmin.imacheater.domain.user.dto.res.UserSimpleResponse;
 import team.gokiyeonmin.imacheater.domain.user.entity.User;
 import team.gokiyeonmin.imacheater.domain.user.repository.UserRepository;
 import team.gokiyeonmin.imacheater.global.exception.BusinessException;
 import team.gokiyeonmin.imacheater.global.exception.ErrorCode;
+import team.gokiyeonmin.imacheater.global.security.domain.CustomUserDetail;
 
 @Service
 @RequiredArgsConstructor
@@ -30,10 +32,15 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User signIn(SignInEvent event) {
+    public User getUser(SignInEvent event) {
         return userRepository.findByUsername(event.getUsername())
                 .filter(user -> user.checkPassword(event.getPassword(), passwordEncoder))
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
+    }
+
+    @Transactional(readOnly = true)
+    public UserSimpleResponse getSimpleUser(CustomUserDetail userDetail) {
+        return UserSimpleResponse.fromUserDetail(userDetail);
     }
 
     private void checkDuplicateUser(String username, String nickname) {
