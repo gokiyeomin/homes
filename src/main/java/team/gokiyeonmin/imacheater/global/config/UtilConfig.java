@@ -1,4 +1,4 @@
-package team.gokiyeonmin.imacheater.global.util.config;
+package team.gokiyeonmin.imacheater.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;

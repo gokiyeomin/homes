@@ -1,4 +1,4 @@
-package team.gokiyeonmin.imacheater.global.security.config;
+package team.gokiyeonmin.imacheater.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
