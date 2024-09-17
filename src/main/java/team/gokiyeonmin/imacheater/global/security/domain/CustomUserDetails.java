@@ -18,6 +18,7 @@ public class CustomUserDetails implements UserDetails {
 
     public CustomUserDetails(User user) {
         this.customUserDetailInfo = new CustomUserDetailInfo(
+                user.getId(),
                 user.getUsername(),
                 user.getNickname(),
                 user.getPassword(),
@@ -34,6 +35,10 @@ public class CustomUserDetails implements UserDetails {
                 .toList();
     }
 
+    public Long getId() {
+        return customUserDetailInfo.id;
+    }
+
     @Override
     public String getPassword() {
         return customUserDetailInfo.password;
@@ -45,6 +50,7 @@ public class CustomUserDetails implements UserDetails {
     }
 
     private record CustomUserDetailInfo(
+            Long id,
             String username,
             String nickname,
             String password,

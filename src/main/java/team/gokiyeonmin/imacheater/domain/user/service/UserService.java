@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import team.gokiyeonmin.imacheater.domain.auth.event.SignInEvent;
 import team.gokiyeonmin.imacheater.domain.auth.event.SignUpEvent;
 import team.gokiyeonmin.imacheater.domain.user.entity.User;
 import team.gokiyeonmin.imacheater.domain.user.repository.UserRepository;
@@ -26,6 +27,13 @@ public class UserService {
         user.encodePassword(passwordEncoder);
 
         return userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public User signIn(SignInEvent event) {
+        return userRepository.findByUsername(event.getUsername())
+                .filter(user -> user.checkPassword(event.getPassword(), passwordEncoder))
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
     }
 
     private void checkDuplicateUser(String username, String nickname) {

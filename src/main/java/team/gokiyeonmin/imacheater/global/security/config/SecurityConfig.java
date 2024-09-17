@@ -18,6 +18,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.web.cors.CorsConfigurationSource;
 import team.gokiyeonmin.imacheater.global.jwt.JwtUtil;
 import team.gokiyeonmin.imacheater.global.security.domain.SecurityConstant;
+import team.gokiyeonmin.imacheater.global.security.filter.GlobalLoggerFilter;
 import team.gokiyeonmin.imacheater.global.security.filter.JwtAuthenticationFilter;
 import team.gokiyeonmin.imacheater.global.security.filter.JwtExceptionFilter;
 import team.gokiyeonmin.imacheater.global.security.service.CustomUserDetailService;
@@ -75,7 +76,10 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(
                         new JwtExceptionFilter(objectMapper),
-                        JwtAuthenticationFilter.class);
+                        JwtAuthenticationFilter.class)
+                .addFilterBefore(
+                        new GlobalLoggerFilter(),
+                        JwtExceptionFilter.class);
 
         return httpSecurity.build();
     }
