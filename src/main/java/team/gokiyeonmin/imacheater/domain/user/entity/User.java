@@ -37,13 +37,13 @@ public class User {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "nickname", length = 50, unique = true)
+    @Column(name = "nickname", length = 50, unique = true, nullable = false)
     private String nickname;
 
-    @Column(name = "username", length = 20, unique = true)
+    @Column(name = "username", length = 20, unique = true, nullable = false)
     private String username;
 
-    @Column(name = "password", length = 70)
+    @Column(name = "password", length = 70, nullable = false)
     private String password;
 
     @Column(name = "department", length = 50)
@@ -52,8 +52,11 @@ public class User {
     /* -------------------------------------------- */
     /* -------------- Relation Column ------------- */
     /* -------------------------------------------- */
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<UserRole> roles = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private UserImage userImage;
 
     /* -------------------------------------------- */
     /* ----------------- Functions ---------------- */
@@ -88,5 +91,15 @@ public class User {
                 .map(UserRole::getRole)
                 .max(Comparator.comparing(Role::getPriority))
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_ROLE));
+    }
+
+    public void updateInfo(String nickname) {
+        if (!this.nickname.equals(nickname)) {
+            this.nickname = nickname;
+        }
+    }
+
+    public void updateImage(UserImage userImage) {
+        this.userImage = userImage;
     }
 }

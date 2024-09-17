@@ -3,6 +3,7 @@ package team.gokiyeonmin.imacheater.domain.auth.event;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import team.gokiyeonmin.imacheater.domain.auth.dto.req.SignUpRequest;
 import team.gokiyeonmin.imacheater.domain.user.entity.User;
 
 @Getter
@@ -20,6 +21,15 @@ public class SignUpEvent {
                 .password(password)
                 .nickname(nickname)
                 .department(department)
+                .build();
+    }
+
+    public static SignUpEvent from(SignUpRequest request) {
+        return SignUpEvent.builder()
+                .username(request.username())
+                .password(request.password())
+                .nickname(request.nickname())
+                .department(request.department())
                 .build();
     }
 }

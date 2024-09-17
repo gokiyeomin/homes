@@ -8,12 +8,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(description = "회원가입 응답 DTO")
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public record SignUpResponse(
-        @JsonProperty("username")
         @Schema(description = "아이디", example = "gokiyeonmin")
+        @JsonProperty("username")
         String username,
 
-        @JsonProperty("nickname")
         @Schema(description = "닉네임", example = "고기여민")
+        @JsonProperty("nickname")
         String nickname
 ) {
 }

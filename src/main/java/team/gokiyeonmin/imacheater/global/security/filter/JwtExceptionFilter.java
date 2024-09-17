@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.OncePerRequestFilter;
 import team.gokiyeonmin.imacheater.global.exception.BusinessException;
 import team.gokiyeonmin.imacheater.global.exception.ErrorCode;
@@ -14,6 +15,7 @@ import team.gokiyeonmin.imacheater.global.exception.TokenException;
 
 import java.io.IOException;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtExceptionFilter extends OncePerRequestFilter {
 
@@ -28,17 +30,19 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } catch (SecurityException e) {
-            setErrorResponse(response, ErrorCode.ACCESS_DENIED);
+            setErrorResponse(response, e, ErrorCode.ACCESS_DENIED);
         } catch (TokenException e) {
-            setErrorResponse(response, e.getErrorCode());
+            setErrorResponse(response, e, e.getErrorCode());
         } catch (BusinessException e) {
-            setErrorResponse(response, e.getErrorCode());
+            setErrorResponse(response, e, e.getErrorCode());
         } catch (Exception e) {
-            setErrorResponse(response, ErrorCode.INTERNAL_SERVER_ERROR);
+            e.printStackTrace();
+            setErrorResponse(response, e, ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 
-    private void setErrorResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+    private void setErrorResponse(HttpServletResponse response, Exception e, ErrorCode errorCode) throws IOException {
+        log.error("{}: {}, {}", e.getClass().getName(), errorCode.getCode(), errorCode.getMessage());
         response.setStatus(errorCode.getHttpStatus().value());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

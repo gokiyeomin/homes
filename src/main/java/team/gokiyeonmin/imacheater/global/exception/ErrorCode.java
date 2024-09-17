@@ -19,7 +19,10 @@ public enum ErrorCode {
     // 400 Bad Request
     ILLEGAL_ARGUMENT(400_000, HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     MISSING_TOKEN(400_001, HttpStatus.BAD_REQUEST, "토큰이 누락되었습니다."),
-    MISSING_REQUEST_PARAMETER(400_001, HttpStatus.BAD_REQUEST, "필수 요청 파라미터가 누락되었습니다."),
+    MISSING_REQUEST_PARAMETER(400_002, HttpStatus.BAD_REQUEST, "필수 요청 파라미터가 누락되었습니다."),
+    MISSING_CONTENT_TYPE(400_003, HttpStatus.BAD_REQUEST, "컨텐츠 타입이 누락되었습니다."),
+    ILLEGAL_CONTENT_TYPE(400_004, HttpStatus.BAD_REQUEST, "잘못된 컨텐츠 타입입니다."),
+    ILLEGAL_S3_URL(400_005, HttpStatus.BAD_REQUEST, "S3 URL이 잘못되었습니다."),
     ALREADY_EXISTS_USERNAME(400_100, HttpStatus.BAD_REQUEST, "이미 존재하는 아이디입니다."),
     ALREADY_EXISTS_NICKNAME(400_101, HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다."),
     NOT_FOUND_USER(400_102, HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다."),
@@ -43,7 +46,9 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(500_000, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 요청 중 오류가 발생했습니다."),
 
     // 502 Bad Gateway
-    EXTERNAL_SERVER_ERROR(502_000, HttpStatus.BAD_GATEWAY, "서버 외부 요청 중 오류가 발생했습니다.");
+    EXTERNAL_SERVER_ERROR(502_000, HttpStatus.BAD_GATEWAY, "서버 외부 요청 중 오류가 발생했습니다."),
+    S3_UPLOAD_ERROR(502_001, HttpStatus.BAD_GATEWAY, "S3 이미지 업로드 중 오류가 발생했습니다."),
+    S3_DELETE_ERROR(502_002, HttpStatus.BAD_GATEWAY, "S3 이미지 삭제 중 오류가 발생했습니다.");
 
     private final Integer code;
     private final HttpStatus httpStatus;

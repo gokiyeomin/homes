@@ -1,4 +1,4 @@
-package team.gokiyeonmin.imacheater.global.jwt;
+package team.gokiyeonmin.imacheater.global.util;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -18,6 +18,11 @@ import java.util.List;
 @Component
 public class JwtUtil {
 
+    public static final String USERNAME = "username";
+    public static final String ROLES = "roles";
+    public static final String AUTHORIZATION = "Authorization";
+    public static final String BEARER = "Bearer ";
+
     private final SecretKey key;
 
     private final Long accessTokenExpirePeriod;
@@ -31,7 +36,7 @@ public class JwtUtil {
     }
 
     public String extractToken(final String authorizationHeader) {
-        if (authorizationHeader == null || !authorizationHeader.startsWith(JwtConstant.BEARER)) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith(JwtUtil.BEARER)) {
             throw new TokenException(ErrorCode.MISSING_TOKEN);
         }
 
@@ -66,8 +71,8 @@ public class JwtUtil {
 
     private String generateToken(String username, List<Role> roles, Long expirePeriod) {
         return Jwts.builder()
-                .claim(JwtConstant.USERNAME, username)
-                .claim(JwtConstant.ROLES, roles)
+                .claim(JwtUtil.USERNAME, username)
+                .claim(JwtUtil.ROLES, roles)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expirePeriod))
                 .signWith(key, Jwts.SIG.HS512)

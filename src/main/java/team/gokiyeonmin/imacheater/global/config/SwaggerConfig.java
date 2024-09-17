@@ -1,4 +1,4 @@
-package team.gokiyeonmin.imacheater.global.swagger.config;
+package team.gokiyeonmin.imacheater.global.config;
 
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
