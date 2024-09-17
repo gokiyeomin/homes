@@ -6,7 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.gokiyeonmin.imacheater.domain.auth.event.SignInEvent;
 import team.gokiyeonmin.imacheater.domain.auth.event.SignUpEvent;
-import team.gokiyeonmin.imacheater.domain.user.dto.res.UserSimpleResponse;
+import team.gokiyeonmin.imacheater.domain.user.dto.req.UserUpdateRequest;
+import team.gokiyeonmin.imacheater.domain.user.dto.res.UserResponse;
 import team.gokiyeonmin.imacheater.domain.user.entity.User;
 import team.gokiyeonmin.imacheater.domain.user.repository.UserRepository;
 import team.gokiyeonmin.imacheater.global.exception.BusinessException;
@@ -38,11 +39,21 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserSimpleResponse getSimpleUser(Long userId) {
+    public UserResponse getSimpleUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
 
-        return UserSimpleResponse.fromEntity(user);
+        return UserResponse.fromEntity(user);
+    }
+
+    @Transactional
+    public UserResponse updateSimpleUser(Long userId, UserUpdateRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
+
+        user.update(request.nickname());
+
+        return UserResponse.fromEntity(user);
     }
 
     private void checkDuplicateUser(String username, String nickname) {

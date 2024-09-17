@@ -6,9 +6,9 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import team.gokiyeonmin.imacheater.domain.user.entity.User;
 
-@Schema(description = "사용자 간단한 정보 응답")
+@Schema(description = "사용자 정보 응답")
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
-public record UserSimpleResponse(
+public record UserResponse(
         @Schema(description = "닉네임", example = "고기여민")
         @JsonProperty("nickname")
         String nickname,
@@ -22,8 +22,8 @@ public record UserSimpleResponse(
         String department
 ) {
 
-    public static UserSimpleResponse fromEntity(User user) {
-        return new UserSimpleResponse(
+    public static UserResponse fromEntity(User user) {
+        return new UserResponse(
                 user.getNickname(),
                 user.getUsername(),
                 user.getDepartment()

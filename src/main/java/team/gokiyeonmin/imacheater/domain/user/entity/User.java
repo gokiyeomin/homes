@@ -92,4 +92,10 @@ public class User {
                 .max(Comparator.comparing(Role::getPriority))
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_ROLE));
     }
+
+    public void update(String nickname) {
+        if (!this.nickname.equals(nickname)) {
+            this.nickname = nickname;
+        }
+    }
 }
