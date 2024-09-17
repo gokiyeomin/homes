@@ -71,6 +71,10 @@ public class User {
         this.department = department;
     }
 
+    public void encodePassword(PasswordEncoder encoder) {
+        this.password = encoder.encode(this.password);
+    }
+
     public Boolean checkPassword(String plainPassword, PasswordEncoder encoder) {
         return encoder.matches(plainPassword, this.password);
     }

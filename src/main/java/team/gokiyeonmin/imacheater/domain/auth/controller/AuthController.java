@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import team.gokiyeonmin.imacheater.domain.auth.dto.req.SignUpRequest;
 import team.gokiyeonmin.imacheater.domain.auth.service.AuthService;
 
+import java.net.URI;
+
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
@@ -20,6 +22,6 @@ public class AuthController {
             @Valid @RequestBody SignUpRequest request
     ) {
         authService.signUp(request);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.created(URI.create("/auth/signup")).body(null);
     }
 }

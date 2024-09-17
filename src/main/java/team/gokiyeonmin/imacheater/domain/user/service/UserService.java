@@ -1,6 +1,7 @@
 package team.gokiyeonmin.imacheater.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.gokiyeonmin.imacheater.domain.auth.event.SignUpEvent;
@@ -19,11 +20,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
 
+    private final BCryptPasswordEncoder passwordEncoder;
+
     @Transactional
     public void createUser(SignUpEvent event) {
         checkDuplicateUser(event.getUsername(), event.getNickname());
 
-        User user = userRepository.save(event.toEntity());
+        User user = event.toEntity();
+        user.encodePassword(passwordEncoder);
+
+        user = userRepository.save(user);
 
         UserRole role = UserRole.builder()
                 .role(Role.USER)
