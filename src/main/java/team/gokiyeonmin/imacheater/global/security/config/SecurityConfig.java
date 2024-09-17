@@ -1,10 +1,12 @@
 package team.gokiyeonmin.imacheater.global.security.config;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -26,9 +28,14 @@ public class SecurityConfig {
                 )
 
                 // TODO: 인증 필요 엔드포인트 구현
-                .authorizeHttpRequests(registry ->
-                        registry
+                .authorizeHttpRequests(request ->
+                        request
+                                .requestMatchers(PathRequest.toH2Console()).permitAll()
                                 .anyRequest().permitAll()
+                )
+                .headers(headers ->
+                        headers
+                                .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
                 )
                 .build();
     }

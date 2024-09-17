@@ -19,12 +19,16 @@ public enum ErrorCode {
     // 400 Bad Request
     ILLEGAL_ARGUMENT(400_000, HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     MISSING_REQUEST_PARAMETER(400_001, HttpStatus.BAD_REQUEST, "필수 요청 파라미터가 누락되었습니다."),
+    ALREADY_EXISTS_USERNAME(400_100, HttpStatus.BAD_REQUEST, "이미 존재하는 아이디입니다."),
+    ALREADY_EXISTS_NICKNAME(400_101, HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다."),
 
     // 401 Unauthorized
+
 
     // 403 Forbidden
 
     // 404 Not Found
+    NOT_FOUND_USER_ROLE(400_100, HttpStatus.NOT_FOUND, "사용자 권한이 존재하지 않습니다."),
 
     // 405 Method Not Allowed
 

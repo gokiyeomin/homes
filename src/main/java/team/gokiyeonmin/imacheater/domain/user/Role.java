@@ -1,4 +1,4 @@
-package team.gokiyeonmin.imacheater.global.security;
+package team.gokiyeonmin.imacheater.domain.user;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

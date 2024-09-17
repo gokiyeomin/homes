@@ -26,4 +26,10 @@ public class GlobalExceptionHandler {
         final ErrorResponse response = ErrorResponse.of(ErrorCode.ILLEGAL_ARGUMENT);
         return ResponseEntity.badRequest().body(response);
     }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponse> businessExceptionHandler(BusinessException e) {
+        final ErrorResponse response = ErrorResponse.of(e.getErrorCode());
+        return ResponseEntity.status(e.getErrorCode().getHttpStatus()).body(response);
+    }
 }
