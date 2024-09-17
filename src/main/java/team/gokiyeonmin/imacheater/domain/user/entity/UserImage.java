@@ -39,4 +39,8 @@ public class UserImage {
             this.url = url;
         }
     }
+
+    public void deleteUrl() {
+        this.url = null;
+    }
 }

@@ -13,7 +13,7 @@ import team.gokiyeonmin.imacheater.domain.auth.event.SignUpEvent;
 import team.gokiyeonmin.imacheater.domain.user.entity.User;
 import team.gokiyeonmin.imacheater.domain.user.entity.UserRole;
 import team.gokiyeonmin.imacheater.global.context.UserContextHolder;
-import team.gokiyeonmin.imacheater.global.jwt.JwtUtil;
+import team.gokiyeonmin.imacheater.global.util.JwtUtil;
 
 @Service
 @Slf4j

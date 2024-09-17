@@ -16,12 +16,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.cors.CorsConfigurationSource;
-import team.gokiyeonmin.imacheater.global.jwt.JwtUtil;
 import team.gokiyeonmin.imacheater.global.security.domain.SecurityConstant;
 import team.gokiyeonmin.imacheater.global.security.filter.GlobalLoggerFilter;
 import team.gokiyeonmin.imacheater.global.security.filter.JwtAuthenticationFilter;
 import team.gokiyeonmin.imacheater.global.security.filter.JwtExceptionFilter;
 import team.gokiyeonmin.imacheater.global.security.service.CustomUserDetailService;
+import team.gokiyeonmin.imacheater.global.util.JwtUtil;
 
 @Configuration
 @EnableWebSecurity

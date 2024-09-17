@@ -1,10 +1,7 @@
 package team.gokiyeonmin.imacheater.domain.user.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import team.gokiyeonmin.imacheater.domain.user.dto.res.UserImageResponse;
 import team.gokiyeonmin.imacheater.domain.user.service.UserImageService;
@@ -29,5 +26,12 @@ public class UserImageController {
             @RequestParam("image") MultipartFile image
     ) {
         return userImageService.updateUserImage(userId, image);
+    }
+
+    @DeleteMapping("/api/users/image")
+    public void deleteUserImage(
+            @UserId Long userId
+    ) {
+        userImageService.deleteUserImage(userId);
     }
 }

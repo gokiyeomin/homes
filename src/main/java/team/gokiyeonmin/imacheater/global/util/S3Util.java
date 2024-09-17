@@ -16,12 +16,15 @@ import java.util.stream.Stream;
 
 @Component
 @Slf4j
-public class ImageUtil {
+public class S3Util {
+
+    public static final String USER_IMAGE_FOLDER = "user";
+    public static final String ITEM_IMAGE_FOLDER = "item";
 
     private final S3Operations s3Operations;
     private final String bucket;
 
-    public ImageUtil(
+    public S3Util(
             S3Operations s3Operations,
             @Value("${spring.cloud.aws.s3.bucket}") String bucket
     ) {
