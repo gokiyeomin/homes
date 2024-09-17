@@ -25,10 +25,14 @@ public record SignUpRequest(
 
         @JsonProperty("nickname")
         @Schema(description = "닉네임", example = "고기여민")
+        @NotNull(message = "닉네임은 필수입니다.")
+        @NotBlank(message = "닉네임은 필수입니다.")
         String nickname,
 
         @JsonProperty("department")
         @Schema(description = "학부/학과", example = "컴퓨터학부")
+        @NotNull(message = "학부/학과는 필수입니다.")
+        @NotBlank(message = "학부/학과는 필수입니다.")
         String department
 ) {
 
