@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
-import team.gokiyeonmin.imacheater.global.security.domain.CustomUserDetail;
+import team.gokiyeonmin.imacheater.domain.user.entity.User;
 
 @Schema(description = "사용자 간단한 정보 응답")
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
@@ -22,7 +22,11 @@ public record UserSimpleResponse(
         String department
 ) {
 
-    public static UserSimpleResponse fromUserDetail(CustomUserDetail userDetail) {
-        return new UserSimpleResponse(userDetail.getNickname(), userDetail.getUsername(), userDetail.getDepartment());
+    public static UserSimpleResponse fromEntity(User user) {
+        return new UserSimpleResponse(
+                user.getNickname(),
+                user.getUsername(),
+                user.getDepartment()
+        );
     }
 }

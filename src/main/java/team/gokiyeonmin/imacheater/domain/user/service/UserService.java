@@ -11,7 +11,6 @@ import team.gokiyeonmin.imacheater.domain.user.entity.User;
 import team.gokiyeonmin.imacheater.domain.user.repository.UserRepository;
 import team.gokiyeonmin.imacheater.global.exception.BusinessException;
 import team.gokiyeonmin.imacheater.global.exception.ErrorCode;
-import team.gokiyeonmin.imacheater.global.security.domain.CustomUserDetail;
 
 @Service
 @RequiredArgsConstructor
@@ -39,8 +38,11 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserSimpleResponse getSimpleUser(CustomUserDetail userDetail) {
-        return UserSimpleResponse.fromUserDetail(userDetail);
+    public UserSimpleResponse getSimpleUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
+
+        return UserSimpleResponse.fromEntity(user);
     }
 
     private void checkDuplicateUser(String username, String nickname) {

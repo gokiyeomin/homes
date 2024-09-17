@@ -1,70 +1,42 @@
 package team.gokiyeonmin.imacheater.global.security.domain;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import team.gokiyeonmin.imacheater.domain.user.Role;
-import team.gokiyeonmin.imacheater.domain.user.entity.User;
-import team.gokiyeonmin.imacheater.domain.user.entity.UserRole;
 
 import java.util.Collection;
 import java.util.List;
 
 @Getter
+@RequiredArgsConstructor
 public class CustomUserDetail implements UserDetails {
 
-    private final CustomUserDetailInfo customUserDetailInfo;
-
-    public CustomUserDetail(User user) {
-        this.customUserDetailInfo = new CustomUserDetailInfo(
-                user.getId(),
-                user.getUsername(),
-                user.getNickname(),
-                user.getPassword(),
-                user.getDepartment(),
-                user.getRoles().stream().map(UserRole::getRole).toList()
-        );
-    }
+    private final Long userId;
+    private final String username;
+    private final List<Role> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return customUserDetailInfo.roles.stream()
+        return roles.stream()
                 .map(Role::toGrantedAuthority)
                 .map(SimpleGrantedAuthority::new)
                 .toList();
     }
 
     public Long getId() {
-        return customUserDetailInfo.id;
-    }
-
-    public String getNickname() {
-        return customUserDetailInfo.nickname;
+        return userId;
     }
 
     @Override
     public String getUsername() {
-        return customUserDetailInfo.username;
+        return username;
     }
 
     @Override
     public String getPassword() {
-        return customUserDetailInfo.password;
-    }
-
-    public String getDepartment() {
-        return customUserDetailInfo.department;
-    }
-
-    private record CustomUserDetailInfo(
-            Long id,
-            String username,
-            String nickname,
-            String password,
-            String department,
-            List<Role> roles
-    ) {
-
+        return null;
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.gokiyeonmin.imacheater.domain.user.entity.User;
+import team.gokiyeonmin.imacheater.domain.user.entity.UserRole;
 import team.gokiyeonmin.imacheater.domain.user.repository.UserRepository;
 import team.gokiyeonmin.imacheater.global.exception.BusinessException;
 import team.gokiyeonmin.imacheater.global.exception.ErrorCode;
@@ -23,6 +24,10 @@ public class CustomUserDetailService implements UserDetailsService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
 
-        return new CustomUserDetail(user);
+        return new CustomUserDetail(
+                user.getId(),
+                user.getUsername(),
+                user.getRoles().stream().map(UserRole::getRole).toList()
+        );
     }
 }
