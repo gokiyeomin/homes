@@ -51,7 +51,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
 
-        user.update(request.nickname());
+        user.updateInfo(request.nickname());
 
         return UserResponse.fromEntity(user);
     }

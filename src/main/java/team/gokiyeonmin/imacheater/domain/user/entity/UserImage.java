@@ -1,6 +1,7 @@
 package team.gokiyeonmin.imacheater.domain.user.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,4 +21,22 @@ public class UserImage {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    /* -------------------------------------------- */
+    /* ----------------- Functions ---------------- */
+    /* -------------------------------------------- */
+    @Builder
+    public UserImage(
+            User user,
+            String url
+    ) {
+        this.user = user;
+        this.url = url;
+    }
+
+    public void updateUrl(String url) {
+        if (this.url == null || !this.url.equals(url)) {
+            this.url = url;
+        }
+    }
 }

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import team.gokiyeonmin.imacheater.domain.auth.event.SignUpEvent;
 
 @Schema(description = "회원가입 요청 DTO")
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
@@ -35,13 +34,4 @@ public record SignUpRequest(
         @NotBlank(message = "학부/학과는 필수입니다.")
         String department
 ) {
-
-    public SignUpEvent toEvent() {
-        return SignUpEvent.builder()
-                .username(username())
-                .password(password())
-                .nickname(nickname())
-                .department(department())
-                .build();
-    }
 }

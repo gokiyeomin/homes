@@ -37,13 +37,13 @@ public class User {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "nickname", length = 50, unique = true)
+    @Column(name = "nickname", length = 50, unique = true, nullable = false)
     private String nickname;
 
-    @Column(name = "username", length = 20, unique = true)
+    @Column(name = "username", length = 20, unique = true, nullable = false)
     private String username;
 
-    @Column(name = "password", length = 70)
+    @Column(name = "password", length = 70, nullable = false)
     private String password;
 
     @Column(name = "department", length = 50)
@@ -93,9 +93,13 @@ public class User {
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_ROLE));
     }
 
-    public void update(String nickname) {
+    public void updateInfo(String nickname) {
         if (!this.nickname.equals(nickname)) {
             this.nickname = nickname;
         }
+    }
+
+    public void updateImage(UserImage userImage) {
+        this.userImage = userImage;
     }
 }
