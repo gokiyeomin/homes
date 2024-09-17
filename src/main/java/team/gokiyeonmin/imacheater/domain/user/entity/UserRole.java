@@ -30,7 +30,11 @@ public class UserRole {
     /* ----------------- Functions ---------------- */
     /* -------------------------------------------- */
     @Builder
-    public UserRole(Role role) {
+    public UserRole(
+            User user,
+            Role role
+    ) {
+        this.user = user;
         this.role = role;
     }
 }

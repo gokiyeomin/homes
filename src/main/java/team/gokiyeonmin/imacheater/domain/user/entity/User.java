@@ -80,7 +80,6 @@ public class User {
     }
 
     public void addRole(UserRole role) {
-        role.setUser(this);
         this.roles.add(role);
     }
 

@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Role {
-    USER("ROLE_USER"),
-    ADMIN("ROLE_ADMIN");
+    USER("USER"),
+    ADMIN("ADMIN");
 
     private final String name;
 
@@ -24,5 +24,9 @@ public enum Role {
             case USER -> 0;
             case ADMIN -> 1;
         };
+    }
+
+    public String toGrantedAuthority() {
+        return "ROLE_" + name;
     }
 }
