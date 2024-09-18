@@ -43,6 +43,9 @@ dependencies {
     // Spring Boot Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    // Spring Boot Websocket (STOMP)
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
     // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
@@ -59,6 +62,9 @@ dependencies {
 
     // MySQL
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // Mongo
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'
