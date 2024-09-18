@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import team.gokiyeonmin.imacheater.domain.chat.entity.ChatRoom;
 import team.gokiyeonmin.imacheater.domain.user.Role;
 import team.gokiyeonmin.imacheater.global.exception.BusinessException;
 import team.gokiyeonmin.imacheater.global.exception.ErrorCode;
@@ -57,6 +58,9 @@ public class User {
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private UserImage userImage;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<ChatRoom> chatRooms = new ArrayList<>();
 
     /* -------------------------------------------- */
     /* ----------------- Functions ---------------- */
