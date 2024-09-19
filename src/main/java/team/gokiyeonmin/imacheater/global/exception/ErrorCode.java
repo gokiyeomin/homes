@@ -26,6 +26,7 @@ public enum ErrorCode {
     ALREADY_EXISTS_USERNAME(400_100, HttpStatus.BAD_REQUEST, "이미 존재하는 아이디입니다."),
     ALREADY_EXISTS_NICKNAME(400_101, HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다."),
     NOT_FOUND_USER(400_102, HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다."),
+    NOT_FOUND_ITEM(400_200, HttpStatus.BAD_REQUEST, "매물을 찾을 수 없습니다."),
 
     // 401 Unauthorized
     ILLEGAL_TOKEN(401_000, HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
