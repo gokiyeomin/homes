@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
 import team.gokiyeonmin.imacheater.domain.item.entity.Item;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "chat_rooms")
@@ -24,6 +28,12 @@ public class ChatRoom {
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
+    @OneToMany(mappedBy = "chatRoom", fetch = FetchType.LAZY)
+    private List<ChatMessage> chatMessages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "chatRoom", fetch = FetchType.LAZY)
+    private List<ChatRoomUser> chatRoomUsers = new ArrayList<>();
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -33,5 +43,14 @@ public class ChatRoom {
     @Builder
     public ChatRoom(Item item) {
         this.item = item;
+    }
+
+    public Optional<ChatMessage> getLastMessage() {
+        return this.chatMessages.stream()
+                .max(Comparator.comparing(ChatMessage::getSendAt));
+    }
+
+    public String getTitle() {
+        return this.item.getTitle();
     }
 }

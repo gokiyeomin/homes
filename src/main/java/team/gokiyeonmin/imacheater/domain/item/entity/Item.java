@@ -1,10 +1,12 @@
 package team.gokiyeonmin.imacheater.domain.item.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import team.gokiyeonmin.imacheater.domain.user.entity.User;
 
 @Entity
 @Table(name = "items")
+@Getter
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

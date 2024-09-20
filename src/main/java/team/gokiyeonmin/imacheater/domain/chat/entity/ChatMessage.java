@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.gokiyeonmin.imacheater.domain.user.entity.User;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "chat_messages")
 @Getter
@@ -21,13 +23,17 @@ public class ChatMessage {
     private String messageId;
 
     @Column(name = "send_at", nullable = false)
-    private Long sendAt;
+    private LocalDateTime sendAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id", nullable = false, updatable = false)
     private ChatRoom chatRoom;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, updatable = false)
-    private User user;
+    @JoinColumn(name = "sender_id", nullable = false, updatable = false)
+    private User sender;
+
+    public Boolean isRead(LocalDateTime lastReadAt) {
+        return this.sendAt.isBefore(lastReadAt);
+    }
 }

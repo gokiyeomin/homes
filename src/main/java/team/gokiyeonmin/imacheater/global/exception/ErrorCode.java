@@ -25,7 +25,6 @@ public enum ErrorCode {
     ILLEGAL_S3_URL(400_005, HttpStatus.BAD_REQUEST, "S3 URL이 잘못되었습니다."),
     ALREADY_EXISTS_USERNAME(400_100, HttpStatus.BAD_REQUEST, "이미 존재하는 아이디입니다."),
     ALREADY_EXISTS_NICKNAME(400_101, HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다."),
-    NOT_FOUND_USER(400_102, HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다."),
 
     // 401 Unauthorized
     ILLEGAL_TOKEN(401_000, HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
@@ -38,7 +37,10 @@ public enum ErrorCode {
     ACCESS_DENIED(403_000, HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
 
     // 404 Not Found
-    NOT_FOUND_USER_ROLE(400_100, HttpStatus.NOT_FOUND, "사용자 권한이 존재하지 않습니다."),
+    NOT_FOUND_USER_ROLE(404_100, HttpStatus.NOT_FOUND, "사용자 권한이 존재하지 않습니다."),
+    NOT_FOUND_USER(404_101, HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다."),
+    NOT_FOUND_ITEM(404_200, HttpStatus.BAD_REQUEST, "매물을 찾을 수 없습니다."),
+    NOT_FOUND_CHAT_MESSAGE_CONTENT(404_300, HttpStatus.BAD_REQUEST, "채팅 메시지 컨텐츠를 찾을 수 없습니다."),
 
     // 405 Method Not Allowed
 

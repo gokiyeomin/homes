@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.gokiyeonmin.imacheater.domain.user.entity.User;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "chat_room_users")
 @Getter
@@ -17,7 +19,7 @@ public class ChatRoomUser {
     private Long id;
 
     @Column(name = "last_read_at")
-    private Long lastReadAt;
+    private LocalDateTime lastReadAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id", nullable = false, updatable = false)
