@@ -3,6 +3,8 @@ package team.gokiyeonmin.imacheater.domain.chat.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import team.gokiyeonmin.imacheater.domain.chat.dto.req.ChatRoomCreateRequest;
+import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomCreateResponse;
 import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomListResponse;
 import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomResponse;
 import team.gokiyeonmin.imacheater.domain.chat.entity.ChatMessage;
@@ -12,6 +14,8 @@ import team.gokiyeonmin.imacheater.domain.chat.entity.ChatRoomUser;
 import team.gokiyeonmin.imacheater.domain.chat.repository.ChatMessageContentRepository;
 import team.gokiyeonmin.imacheater.domain.chat.repository.ChatMessageRepository;
 import team.gokiyeonmin.imacheater.domain.chat.repository.ChatRoomRepository;
+import team.gokiyeonmin.imacheater.domain.chat.repository.ChatRoomUserRepository;
+import team.gokiyeonmin.imacheater.domain.item.entity.Item;
 import team.gokiyeonmin.imacheater.domain.item.repository.ItemRepository;
 import team.gokiyeonmin.imacheater.domain.user.entity.User;
 import team.gokiyeonmin.imacheater.domain.user.repository.UserRepository;
@@ -29,6 +33,7 @@ public class ChatRoomService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomUserRepository chatRoomUserRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final ChatMessageContentRepository chatMessageContentRepository;
 
@@ -71,5 +76,35 @@ public class ChatRoomService {
         }
 
         return ChatRoomListResponse.of(responses);
+    }
+
+    @Transactional
+    public ChatRoomCreateResponse createChatRoom(Long userId, ChatRoomCreateRequest request) {
+        User customer = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
+        User seller = userRepository.findById(request.sellerId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
+        Item item = itemRepository.findById(request.itemId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
+
+        ChatRoom chatRoom = ChatRoom.builder()
+                .item(item)
+                .build();
+        chatRoomRepository.save(chatRoom);
+
+        ChatRoomUser chatRoomCustomer = ChatRoomUser.builder()
+                .chatRoom(chatRoom)
+                .user(customer)
+                .build();
+
+        ChatRoomUser chatRoomSeller = ChatRoomUser.builder()
+                .chatRoom(chatRoom)
+                .user(seller)
+                .build();
+
+        chatRoomUserRepository.save(chatRoomCustomer);
+        chatRoomUserRepository.save(chatRoomSeller);
+
+        return ChatRoomCreateResponse.fromEntity(chatRoom);
     }
 }

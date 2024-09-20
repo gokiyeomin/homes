@@ -2,6 +2,7 @@ package team.gokiyeonmin.imacheater.domain.chat.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.gokiyeonmin.imacheater.domain.user.entity.User;
@@ -28,4 +29,11 @@ public class ChatRoomUser {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
+
+    @Builder
+    public ChatRoomUser(ChatRoom chatRoom, User user) {
+        this.chatRoom = chatRoom;
+        this.user = user;
+        this.lastReadAt = LocalDateTime.now();
+    }
 }

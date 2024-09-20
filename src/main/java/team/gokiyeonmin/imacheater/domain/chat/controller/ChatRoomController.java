@@ -1,15 +1,21 @@
 package team.gokiyeonmin.imacheater.domain.chat.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import team.gokiyeonmin.imacheater.domain.chat.dto.req.ChatRoomCreateRequest;
 import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomCreateResponse;
 import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomListResponse;
 import team.gokiyeonmin.imacheater.domain.chat.service.ChatRoomService;
 import team.gokiyeonmin.imacheater.global.interceptor.annotation.UserId;
+
+import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,8 +34,10 @@ public class ChatRoomController {
 
     @PostMapping("/api/chat/rooms")
     public ResponseEntity<ChatRoomCreateResponse> createChatRoom(
-            @UserId Long userId
+            @Parameter(hidden = true) @UserId Long userId,
+            @Valid @RequestBody ChatRoomCreateRequest request
     ) {
-        return null;
+        ChatRoomCreateResponse response = chatRoomService.createChatRoom(userId, request);
+        return ResponseEntity.created(URI.create("/api/chat/rooms")).body(response);
     }
 }

@@ -43,6 +43,7 @@ public class ChatRoom {
     @Builder
     public ChatRoom(Item item) {
         this.item = item;
+        this.createdAt = LocalDateTime.now();
     }
 
     public Optional<ChatMessage> getLastMessage() {
