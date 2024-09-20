@@ -20,7 +20,6 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
-
     @Transactional
     public User createUser(SignUpEvent event) {
         checkDuplicateUser(event.getUsername(), event.getNickname());
@@ -64,4 +63,5 @@ public class UserService {
             throw new BusinessException(ErrorCode.ALREADY_EXISTS_NICKNAME);
         }
     }
+
 }
