@@ -4,20 +4,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import team.gokiyeonmin.imacheater.domain.Direction;
-import team.gokiyeonmin.imacheater.domain.auth.event.SignInEvent;
 import team.gokiyeonmin.imacheater.domain.item.Door;
 import team.gokiyeonmin.imacheater.domain.item.dto.req.ItemEnrollRequest;
 import team.gokiyeonmin.imacheater.domain.item.dto.req.ItemUpdateRequest;
+import team.gokiyeonmin.imacheater.domain.item.dto.res.ItemImageResponse;
 import team.gokiyeonmin.imacheater.domain.item.dto.res.ItemResponse;
+import team.gokiyeonmin.imacheater.domain.item.dto.res.ItemSimpleResponse;
 import team.gokiyeonmin.imacheater.domain.item.entity.Item;
+import team.gokiyeonmin.imacheater.domain.item.entity.ItemImage;
+import team.gokiyeonmin.imacheater.domain.item.repository.ItemImageRepository;
 import team.gokiyeonmin.imacheater.domain.item.repository.ItemRepository;
 import team.gokiyeonmin.imacheater.domain.item.repository.ItemSpecification;
-import team.gokiyeonmin.imacheater.domain.user.dto.req.UserUpdateRequest;
-import team.gokiyeonmin.imacheater.domain.user.dto.res.UserResponse;
-import team.gokiyeonmin.imacheater.domain.user.entity.User;
+import team.gokiyeonmin.imacheater.domain.user.dto.res.UserImageResponse;
+import team.gokiyeonmin.imacheater.domain.user.entity.UserImage;
+import team.gokiyeonmin.imacheater.domain.user.event.RollbackUploadedImageEvent;
 import team.gokiyeonmin.imacheater.global.exception.BusinessException;
 import team.gokiyeonmin.imacheater.global.exception.ErrorCode;
+import team.gokiyeonmin.imacheater.global.util.S3Util;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,54 +32,122 @@ import java.util.List;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final ItemImageRepository itemImageRepository;
+    private final S3Util s3Util;
 
-    public Item enrollItem(ItemEnrollRequest itemEnrollRequest) {
+    public ItemResponse enrollItem(ItemEnrollRequest request, List<MultipartFile> images) {
+        // 매물 저장
         Item item = Item.builder()
-                .title(itemEnrollRequest.title())
-                .content(itemEnrollRequest.content())
-                .address(itemEnrollRequest.address())
-                .deposit(itemEnrollRequest.deposit())
-                .rent(itemEnrollRequest.rent())
-                .maintenanceFeeIncluded(itemEnrollRequest.maintenanceFeeIncluded())
-                .moveInDate(itemEnrollRequest.moveInDate())
-                .expirationDate(itemEnrollRequest.expirationDate())
-                .door(itemEnrollRequest.door())
-                .floor(itemEnrollRequest.floor())
-                .roomCount(itemEnrollRequest.roomCount())
-                .windowDirection(itemEnrollRequest.windowDirection())
+                .title(request.title())
+                .content(request.content())
+                .address(request.address())
+                .deposit(request.deposit())
+                .rent(request.rent())
+                .maintenanceFeeIncluded(request.maintenanceFeeIncluded())
+                .moveInDate(request.moveInDate())
+                .expirationDate(request.expirationDate())
+                .door(request.door())
+                .floor(request.floor())
+                .roomCount(request.roomCount())
+                .windowDirection(request.windowDirection())
                 .build();
+        itemRepository.save(item);
 
-        return itemRepository.save(item);
+        // 이미지 처리 및 S3 업로드
+        for (int i = 0; i < images.size(); i++) {
+            MultipartFile image = images.get(i);
+            String uploadedImageUrl = s3Util.uploadImage(S3Util.ITEM_IMAGE_FOLDER, image);
+
+            ItemImage itemImage = ItemImage.builder()
+                    .item(item)
+                    .url(uploadedImageUrl)
+                    .isThumbnail((i == 0))  // 첫 번째 이미지를 썸네일로 설정
+                    .build();
+            itemImageRepository.save(itemImage);
+        }
+
+        return ItemResponse.fromEntity(item);
     }
 
     @Transactional(readOnly = true)
-    public Item getItem(Long itemId) {
-         return itemRepository.findById(itemId)
+    public ItemResponse getItem(Long itemId) {
+         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
+
+         return ItemResponse.fromEntity(item);
     }
 
     @Transactional(readOnly = true)
-    public List<ItemResponse> searchSimpleItems(Door door, Long floor, Long roomCount, Direction windowDirection,
-                                             Long minDeposit, Long maxDeposit, Long minRent, Long maxRent,
-                                             Boolean maintenanceFeeIncluded, LocalDate moveInDate) {
+    public List<ItemSimpleResponse> searchSimpleItems(Door door, Long floor, Long roomCount, Direction windowDirection,
+                                                      Long minDeposit, Long maxDeposit, Long minRent, Long maxRent,
+                                                      Boolean maintenanceFeeIncluded, LocalDate moveInDate) {
 
         Specification<Item> specification = ItemSpecification.withFilters(door, floor, roomCount, windowDirection,
                 minDeposit, maxDeposit, minRent, maxRent,
                 maintenanceFeeIncluded, moveInDate);
 
         return itemRepository.findAll(specification).stream()
-                .map(ItemResponse::fromEntity)
+                .map(ItemSimpleResponse::fromEntity)
                 .toList();
     }
 
     @Transactional
-    public Item updateItem(Long itemId, ItemUpdateRequest request) {
+    public ItemResponse updateItem(Long itemId, ItemUpdateRequest request, List<MultipartFile> newImages, List<Long> deletedImageIds) {
+        // 1. 매물정보 가져옴
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
 
-        item.updateInfo(request);
+        // 2. 삭제된 이미지 처리
+        if (deletedImageIds != null) {
+            for (Long imageId : deletedImageIds) {
+                item.removeImage(imageId);
+                itemImageRepository.deleteById(imageId);
+            }
+        }
 
-        return itemRepository.save(item);
+        // 2. 삭제된 이미지 처리
+        if (deletedImageIds != null) {
+            for (Long imageId : deletedImageIds) {
+                // 삭제할 이미지 가져오기
+                ItemImage itemImage = item.getItemImages().stream()
+                        .filter(image -> image.getId().equals(imageId))
+                        .findFirst()
+                        .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM_IMAGE));
+
+                // S3에서 이미지 삭제
+                s3Util.deleteImage(itemImage.getUrl());
+
+                // DB에서 이미지 삭제
+                item.removeImage(imageId);
+                itemImageRepository.deleteById(imageId);
+            }
+        }
+
+        // 3. 새로운 이미지 업로드 및 추가
+        for (MultipartFile image : newImages) {
+            String uploadedImageUrl = s3Util.uploadImage(S3Util.ITEM_IMAGE_FOLDER, image);
+
+            ItemImage itemImage = ItemImage.builder()
+                    .item(item)
+                    .url(uploadedImageUrl)
+                    .isThumbnail(false)
+                    .build();
+            itemImageRepository.save(itemImage);
+        }
+
+        // 4. 첫 번째 이미지를 썸네일로 설정
+        List<ItemImage> itemImages = item.getItemImages();
+
+        if (!itemImages.isEmpty()) {
+            itemImages.forEach(image -> image.changeThumbnail(false));  // 기존 썸네일 초기화
+            itemImages.get(0).changeThumbnail(true);  // 첫 번째 이미지를 썸네일로 설정
+        }
+
+        // 5. 나머지 아이템 정보 업데이트
+        item.updateInfo(request);
+        itemRepository.save(item);
+
+        return ItemResponse.fromEntity(item);
     }
 
     @Transactional
@@ -83,5 +156,15 @@ public class ItemService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
 
         itemRepository.delete(item);
+    }
+
+    @Transactional
+    public ItemResponse changeIsSold(Long itemId, Boolean isSold) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
+
+        item.changeSold(isSold);
+
+        return ItemResponse.fromEntity(item);
     }
 }

@@ -6,10 +6,12 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.web.multipart.MultipartFile;
 import team.gokiyeonmin.imacheater.domain.Direction;
 import team.gokiyeonmin.imacheater.domain.item.Door;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Schema(description = "매물 등록 요청")
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
