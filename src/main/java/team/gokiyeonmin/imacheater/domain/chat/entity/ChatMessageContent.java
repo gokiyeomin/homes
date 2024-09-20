@@ -26,6 +26,16 @@ public class ChatMessageContent {
         }
     }
 
+    public String getContent() {
+        if (data instanceof Message) {
+            return ((Message) data).getContent();
+        } else if (data instanceof Image) {
+            return ((Image) data).getUrl();
+        } else {
+            return null;
+        }
+    }
+
     public interface ChatData {
     }
 

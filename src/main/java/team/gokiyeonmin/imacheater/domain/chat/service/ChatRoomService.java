@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.gokiyeonmin.imacheater.domain.chat.dto.req.ChatRoomCreateRequest;
 import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomCreateResponse;
+import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomDetailResponse;
 import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomListResponse;
 import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomResponse;
 import team.gokiyeonmin.imacheater.domain.chat.entity.ChatMessage;
@@ -21,6 +22,7 @@ import team.gokiyeonmin.imacheater.domain.user.entity.User;
 import team.gokiyeonmin.imacheater.domain.user.repository.UserRepository;
 import team.gokiyeonmin.imacheater.global.exception.BusinessException;
 import team.gokiyeonmin.imacheater.global.exception.ErrorCode;
+import team.gokiyeonmin.imacheater.global.util.Pair;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -37,6 +39,36 @@ public class ChatRoomService {
     private final ChatMessageRepository chatMessageRepository;
     private final ChatMessageContentRepository chatMessageContentRepository;
 
+    @Transactional
+    public ChatRoomCreateResponse createChatRoom(Long userId, ChatRoomCreateRequest request) {
+        User customer = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
+        User seller = userRepository.findById(request.sellerId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
+        Item item = itemRepository.findById(request.itemId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
+
+        ChatRoom chatRoom = ChatRoom.builder()
+                .item(item)
+                .build();
+        chatRoomRepository.save(chatRoom);
+
+        ChatRoomUser chatRoomCustomer = ChatRoomUser.builder()
+                .chatRoom(chatRoom)
+                .user(customer)
+                .build();
+
+        ChatRoomUser chatRoomSeller = ChatRoomUser.builder()
+                .chatRoom(chatRoom)
+                .user(seller)
+                .build();
+
+        chatRoomUserRepository.save(chatRoomCustomer);
+        chatRoomUserRepository.save(chatRoomSeller);
+
+        return ChatRoomCreateResponse.fromEntity(chatRoom);
+    }
+
     @Transactional(readOnly = true)
     public ChatRoomListResponse getAllChatRooms(Long userId) {
         List<ChatRoom> chatRooms = chatRoomRepository.findAllByUser_Id(userId);
@@ -44,7 +76,6 @@ public class ChatRoomService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
 
         // TODO: 리팩토링 필수
-        // 사유: 너무 잠이 와서 코드 집중력이 떨어짐
         List<ChatRoomResponse> responses = new ArrayList<>();
         for (ChatRoom chatRoom : chatRooms) {
             String preview = chatRoom.getLastMessage()
@@ -78,33 +109,26 @@ public class ChatRoomService {
         return ChatRoomListResponse.of(responses);
     }
 
-    @Transactional
-    public ChatRoomCreateResponse createChatRoom(Long userId, ChatRoomCreateRequest request) {
-        User customer = userRepository.findById(userId)
+    @Transactional(readOnly = true)
+    public ChatRoomDetailResponse getChatRoom(Long userId, Long roomId) {
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_CHAT_ROOM));
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
-        User seller = userRepository.findById(request.sellerId())
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
-        Item item = itemRepository.findById(request.itemId())
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
 
-        ChatRoom chatRoom = ChatRoom.builder()
-                .item(item)
-                .build();
-        chatRoomRepository.save(chatRoom);
+        if (chatRoom.getChatRoomUsers().stream().noneMatch(chatRoomUser -> chatRoomUser.getUser() == user)) {
+            throw new BusinessException(ErrorCode.FORBIDDEN_CHAT_ROOM);
+        }
 
-        ChatRoomUser chatRoomCustomer = ChatRoomUser.builder()
-                .chatRoom(chatRoom)
-                .user(customer)
-                .build();
+        List<ChatMessage> chatMessages = chatRoom.getChatMessages();
+        List<Pair<ChatMessage, ChatMessageContent>> chatMessagePairs = chatMessages.stream()
+                .map(chatMessage -> {
+                    ChatMessageContent chatMessageContent = chatMessageContentRepository.findById(chatMessage.getMessageId())
+                            .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_CHAT_MESSAGE_CONTENT));
+                    return Pair.of(chatMessage, chatMessageContent);
+                })
+                .toList();
 
-        ChatRoomUser chatRoomSeller = ChatRoomUser.builder()
-                .chatRoom(chatRoom)
-                .user(seller)
-                .build();
-
-        chatRoomUserRepository.save(chatRoomCustomer);
-        chatRoomUserRepository.save(chatRoomSeller);
-
-        return ChatRoomCreateResponse.fromEntity(chatRoom);
+        return ChatRoomDetailResponse.fromEntity(chatRoom.getItem(), chatMessagePairs);
     }
 }
