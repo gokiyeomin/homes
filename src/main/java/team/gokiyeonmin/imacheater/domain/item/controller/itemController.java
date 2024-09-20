@@ -80,9 +80,11 @@ public class itemController {
     @PutMapping("/api/items/{itemId}")
     public ResponseEntity<ItemResponse> updateItem(
             @PathVariable Long itemId,
-            @Valid @RequestBody ItemUpdateRequest request
+            @Valid @RequestPart("json") ItemUpdateRequest request,
+            @RequestPart(value = "images", required = false) List<MultipartFile> newImages,
+            @RequestParam(required = false) List<Long> deletedImageIds
     ) {
-        ItemResponse updatedItem = itemService.updateItem(itemId, request);
+        ItemResponse updatedItem = itemService.updateItem(itemId, request, newImages, deletedImageIds);
         return ResponseEntity.ok(updatedItem);
     }
 
