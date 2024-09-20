@@ -6,12 +6,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.gokiyeonmin.imacheater.domain.item.entity.Item;
+import team.gokiyeonmin.imacheater.domain.user.entity.User;
+import team.gokiyeonmin.imacheater.global.exception.BusinessException;
+import team.gokiyeonmin.imacheater.global.exception.ErrorCode;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 @Table(name = "chat_rooms")
@@ -46,12 +48,35 @@ public class ChatRoom {
         this.createdAt = LocalDateTime.now();
     }
 
-    public Optional<ChatMessage> getLastMessage() {
+    public String getPreview() {
         return this.chatMessages.stream()
-                .max(Comparator.comparing(ChatMessage::getSendAt));
+                .max(Comparator.comparing(ChatMessage::getCreatedAt))
+                .map(ChatMessage::getContent)
+                .orElse("");
     }
 
     public String getTitle() {
         return this.item.getTitle();
+    }
+
+    public Integer getUnreadCount(User user) {
+        LocalDateTime lastReadAt = this.getMyChatRoomUser(user.getId()).getLastReadAt();
+
+        return this.chatMessages.stream()
+                .filter(chatMessage -> chatMessage.isRead(lastReadAt))
+                .toList()
+                .size();
+    }
+
+    public void enter(User user) {
+        ChatRoomUser chatRoomUser = this.getMyChatRoomUser(user.getId());
+        chatRoomUser.updateLastReadAt();
+    }
+
+    private ChatRoomUser getMyChatRoomUser(Long userId) {
+        return this.chatRoomUsers.stream()
+                .filter(chatRoomUser -> chatRoomUser.getUser().getId().equals(userId))
+                .findFirst()
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_CHAT_ROOM));
     }
 }

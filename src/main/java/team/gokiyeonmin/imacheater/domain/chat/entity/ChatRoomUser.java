@@ -30,10 +30,18 @@ public class ChatRoomUser {
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
 
+
+    /* -------------------------------------------- */
+    /* ----------------- Functions ---------------- */
+    /* -------------------------------------------- */
     @Builder
     public ChatRoomUser(ChatRoom chatRoom, User user) {
         this.chatRoom = chatRoom;
         this.user = user;
+        this.lastReadAt = LocalDateTime.now();
+    }
+
+    void updateLastReadAt() {
         this.lastReadAt = LocalDateTime.now();
     }
 }

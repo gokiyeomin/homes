@@ -3,12 +3,10 @@ package team.gokiyeonmin.imacheater.domain.chat.dto.res;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
-import team.gokiyeonmin.imacheater.domain.chat.domain.ChatType;
 import team.gokiyeonmin.imacheater.domain.chat.entity.ChatMessage;
-import team.gokiyeonmin.imacheater.domain.chat.entity.ChatMessageContent;
 import team.gokiyeonmin.imacheater.domain.item.entity.Item;
-import team.gokiyeonmin.imacheater.global.util.Pair;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Schema(description = "채팅방 상세 조회 응답")
@@ -24,19 +22,15 @@ public record ChatRoomDetailResponse(
 
     public static ChatRoomDetailResponse fromEntity(
             Item item,
-            List<Pair<ChatMessage, ChatMessageContent>> chatMessagePairs
+            List<ChatMessage> chatMessages
     ) {
         ItemDto itemDto = new ItemDto(item.getId(), item.getTitle());
-        List<ChatMessageDto> messages = chatMessagePairs.stream()
-                .map(pair -> {
-                    ChatMessage chatMessage = pair.first();
-                    ChatMessageContent chatMessageContent = pair.second();
-                    return new ChatMessageDto(
-                            chatMessage.getSender().getId(),
-                            chatMessageContent.getType(),
-                            chatMessageContent.getContent()
-                    );
-                })
+        List<ChatMessageDto> messages = chatMessages.stream()
+                .map(chatMessage -> new ChatMessageDto(
+                        chatMessage.getUser().getId(),
+                        chatMessage.getContent(),
+                        chatMessage.getCreatedAt()
+                ))
                 .toList();
 
         return new ChatRoomDetailResponse(itemDto, messages);
@@ -58,11 +52,11 @@ public record ChatRoomDetailResponse(
             @Schema(description = "채팅 보낸 유저 ID", example = "1")
             Long userId,
 
-            @Schema(description = "채팅 타입", example = "MESSAGE | IMAGE")
-            ChatType type,
+            @Schema(description = "채팅 내용", example = "메시지: 안녕하세요.")
+            String content,
 
-            @Schema(description = "채팅 내용", example = "메시지: 안녕하세요. | 이미지: url")
-            String content
+            @Schema(description = "보낸 시각", example = "2021-08-01T00:00:00")
+            LocalDateTime createdAt
     ) {
     }
 }

@@ -26,11 +26,6 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
         show_sql: true
 
-  data:
-    mongodb:
-      uri: ${MONGODB_URI}
-      database: ${MONGODB_DATABASE}
-
   cloud:
     aws:
       credentials:

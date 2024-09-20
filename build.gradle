@@ -63,9 +63,6 @@ dependencies {
     // MySQL
     runtimeOnly 'com.mysql:mysql-connector-j'
 
-    // Mongo
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

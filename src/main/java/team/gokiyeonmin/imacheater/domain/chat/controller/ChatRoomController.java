@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import team.gokiyeonmin.imacheater.domain.chat.dto.req.ChatRoomCreateRequest;
 import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomCreateResponse;
 import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomDetailResponse;
-import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomListResponse;
+import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomsResponse;
 import team.gokiyeonmin.imacheater.domain.chat.service.ChatRoomService;
 import team.gokiyeonmin.imacheater.global.interceptor.annotation.UserId;
 
@@ -33,20 +33,20 @@ public class ChatRoomController {
 
     @Operation(summary = "유저의 전체 채팅방 조회", description = "유저의 전체 채팅방을 조회합니다.")
     @GetMapping("/api/chat/rooms")
-    public ResponseEntity<ChatRoomListResponse> getAllChatRooms(
+    public ResponseEntity<ChatRoomsResponse> getAllChatRooms(
             @UserId Long userId
     ) {
-        ChatRoomListResponse response = chatRoomService.getAllChatRooms(userId);
+        ChatRoomsResponse response = chatRoomService.getAllChatRooms(userId);
         return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "채팅방 상세 조회 (입장)", description = "채팅방을 조회합니다.")
     @GetMapping("/api/chat/rooms/{roomId}")
-    public ResponseEntity<ChatRoomDetailResponse> getChatRoom(
+    public ResponseEntity<ChatRoomDetailResponse> getChatRoomDetail(
             @UserId Long userId,
             @PathVariable Long roomId
     ) {
-        ChatRoomDetailResponse response = chatRoomService.getChatRoom(userId, roomId);
+        ChatRoomDetailResponse response = chatRoomService.getChatRoomDetail(userId, roomId);
         return ResponseEntity.ok(response);
     }
 }
