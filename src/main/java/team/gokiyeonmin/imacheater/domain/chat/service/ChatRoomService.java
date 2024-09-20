@@ -3,14 +3,13 @@ package team.gokiyeonmin.imacheater.domain.chat.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team.gokiyeonmin.imacheater.domain.chat.dto.req.ChatRoomCreateRequest;
-import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomCreateResponse;
+import team.gokiyeonmin.imacheater.domain.chat.dto.req.ChatRoomIdRequest;
 import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomDetailResponse;
+import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomIdResponse;
 import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomsResponse;
 import team.gokiyeonmin.imacheater.domain.chat.entity.ChatMessage;
 import team.gokiyeonmin.imacheater.domain.chat.entity.ChatRoom;
 import team.gokiyeonmin.imacheater.domain.chat.entity.ChatRoomUser;
-import team.gokiyeonmin.imacheater.domain.chat.repository.ChatMessageRepository;
 import team.gokiyeonmin.imacheater.domain.chat.repository.ChatRoomRepository;
 import team.gokiyeonmin.imacheater.domain.chat.repository.ChatRoomUserRepository;
 import team.gokiyeonmin.imacheater.domain.item.entity.Item;
@@ -31,37 +30,24 @@ public class ChatRoomService {
     private final ItemRepository itemRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomUserRepository chatRoomUserRepository;
-    private final ChatMessageRepository chatMessageRepository;
 
     @Transactional
-    public ChatRoomCreateResponse createChatRoom(Long userId, ChatRoomCreateRequest request) {
-        User customer = userRepository.findById(userId)
+    public ChatRoomIdResponse getChatRoomId(Long customerId, ChatRoomIdRequest request) {
+        User customer = userRepository.findById(customerId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
         User seller = userRepository.findById(request.sellerId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
         Item item = itemRepository.findById(request.itemId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
 
-        ChatRoom chatRoom = chatRoomRepository.save(
-                ChatRoom.builder()
-                        .item(item)
-                        .build()
-        );
+        List<ChatRoom> chatRooms = chatRoomRepository.findAllByItem(item);
 
-        ChatRoomUser chatRoomCustomer = ChatRoomUser.builder()
-                .chatRoom(chatRoom)
-                .user(customer)
-                .build();
+        ChatRoom chatRoom = chatRooms.stream()
+                .filter(_chatRoom -> isChatRoomExist(_chatRoom, customer, seller))
+                .findFirst()
+                .orElseGet(() -> createChatRoom(item, customer, seller));
 
-        ChatRoomUser chatRoomSeller = ChatRoomUser.builder()
-                .chatRoom(chatRoom)
-                .user(seller)
-                .build();
-
-        chatRoomUserRepository.save(chatRoomCustomer);
-        chatRoomUserRepository.save(chatRoomSeller);
-
-        return ChatRoomCreateResponse.fromEntity(chatRoom);
+        return ChatRoomIdResponse.fromEntity(chatRoom);
     }
 
     @Transactional(readOnly = true)
@@ -92,5 +78,33 @@ public class ChatRoomService {
         List<ChatMessage> chatMessages = chatRoom.getChatMessages();
 
         return ChatRoomDetailResponse.fromEntity(chatRoom.getItem(), chatMessages);
+    }
+
+    private Boolean isChatRoomExist(ChatRoom chatRoom, User customer, User seller) {
+        List<ChatRoomUser> chatRoomUsers = chatRoom.getChatRoomUsers();
+        return chatRoomUsers.stream().anyMatch(chatRoomUser -> chatRoomUser.getUser() == customer)
+                && chatRoomUsers.stream().anyMatch(chatRoomUser -> chatRoomUser.getUser() == seller);
+    }
+
+    @Transactional
+    protected ChatRoom createChatRoom(Item item, User customer, User seller) {
+        ChatRoom chatRoom = ChatRoom.builder()
+                .item(item)
+                .build();
+        chatRoomRepository.save(chatRoom);
+
+        ChatRoomUser customerChatRoomUser = ChatRoomUser.builder()
+                .chatRoom(chatRoom)
+                .user(customer)
+                .build();
+        chatRoomUserRepository.save(customerChatRoomUser);
+
+        ChatRoomUser sellerChatRoomUser = ChatRoomUser.builder()
+                .chatRoom(chatRoom)
+                .user(seller)
+                .build();
+        chatRoomUserRepository.save(sellerChatRoomUser);
+
+        return chatRoom;
     }
 }

@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@Schema(description = "채팅방 생성 요청")
+@Schema(description = "채팅방 ID 요청")
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
-public record ChatRoomCreateRequest(
+public record ChatRoomIdRequest(
         @Schema(description = "상품 ID", example = "1")
         @JsonProperty("itemId")
         Long itemId,
