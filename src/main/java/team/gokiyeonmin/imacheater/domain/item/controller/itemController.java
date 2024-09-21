@@ -93,7 +93,7 @@ public class itemController {
     public ResponseEntity<ItemResponse> updateItem(
             @PathVariable Long itemId,
             @Valid @RequestPart("itemUpdateRequest") ItemUpdateRequest request,
-            @RequestPart(value = "images", required = false) List<MultipartFile> newImages
+            @RequestPart(value = "newImages", required = false) List<MultipartFile> newImages
     ) {
         ItemResponse updatedItem = itemService.updateItem(itemId, request, newImages);
         return ResponseEntity.ok(updatedItem);
