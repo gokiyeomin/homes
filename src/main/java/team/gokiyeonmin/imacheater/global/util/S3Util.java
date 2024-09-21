@@ -70,9 +70,6 @@ public class S3Util {
 
     private String getImageType(String contentType) {
         String[] split = contentType.split("/");
-        if (!split[0].equals("multipart")) {
-            throw new BusinessException(ErrorCode.ILLEGAL_CONTENT_TYPE);
-        }
         return split[1];
     }
 
