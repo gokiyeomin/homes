@@ -10,6 +10,7 @@ import team.gokiyeonmin.imacheater.domain.Direction;
 import team.gokiyeonmin.imacheater.domain.item.Door;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Schema(description = "매물 정보 수정 요청")
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
@@ -75,6 +76,10 @@ public record ItemUpdateRequest(
         @JsonProperty("windowDirection")
         @Schema(description = "창문 방향", example = "SOUTH")
         @NotNull(message = "창문 방향은 필수입니다.")
-        Direction windowDirection
+        Direction windowDirection,
+
+        @JsonProperty("deletedImageIds")
+        @Schema(description = "삭제된 이미지 Id들", example = "[1]")
+        List<Long> deletedImageIds
 ) {
 }

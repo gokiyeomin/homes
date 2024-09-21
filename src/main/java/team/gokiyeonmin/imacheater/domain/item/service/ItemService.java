@@ -101,12 +101,13 @@ public class ItemService {
     }
 
     @Transactional
-    public ItemResponse updateItem(Long itemId, ItemUpdateRequest request, List<MultipartFile> newImages, List<Long> deletedImageIds) {
+    public ItemResponse updateItem(Long itemId, ItemUpdateRequest request, List<MultipartFile> newImages) {
         // 1. 매물정보 가져옴
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
 
         // 2. 삭제된 이미지 처리
+        List<Long> deletedImageIds = request.deletedImageIds();
         if (deletedImageIds != null) {
             for (Long imageId : deletedImageIds) {
                 item.removeImage(imageId);
