@@ -78,8 +78,8 @@ public record ItemUpdateRequest(
         @NotNull(message = "창문 방향은 필수입니다.")
         Direction windowDirection,
 
-        @JsonProperty("deletedImageIds")
-        @Schema(description = "삭제된 이미지 Id들", example = "[1]")
+        @JsonProperty("deletedImageUrls")
+        @Schema(description = "삭제된 이미지 Url들", example = "[https://imageCdnAddress.com/folder/imageName.jpg]")
         List<Long> deletedImageIds
 ) {
 }
