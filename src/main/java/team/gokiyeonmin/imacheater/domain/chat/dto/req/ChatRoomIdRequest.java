@@ -10,10 +10,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public record ChatRoomIdRequest(
         @Schema(description = "상품 ID", example = "1")
         @JsonProperty("itemId")
-        Long itemId,
-
-        @Schema(description = "판매자 ID", example = "1")
-        @JsonProperty("sellerId")
-        Long sellerId
+        Long itemId
 ) {
 }

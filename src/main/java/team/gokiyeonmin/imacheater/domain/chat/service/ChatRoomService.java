@@ -35,10 +35,9 @@ public class ChatRoomService {
     public ChatRoomIdResponse getChatRoomId(Long customerId, ChatRoomIdRequest request) {
         User customer = userRepository.findById(customerId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
-        User seller = userRepository.findById(request.sellerId())
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
         Item item = itemRepository.findById(request.itemId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
+        User seller = item.getUser();
 
         List<ChatRoom> chatRooms = chatRoomRepository.findAllByItem(item);
 
