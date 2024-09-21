@@ -3,6 +3,7 @@ package team.gokiyeonmin.imacheater.domain.item.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import team.gokiyeonmin.imacheater.domain.Direction;
@@ -15,6 +16,8 @@ import team.gokiyeonmin.imacheater.domain.item.entity.Item;
 import team.gokiyeonmin.imacheater.domain.item.service.ItemService;
 import team.gokiyeonmin.imacheater.global.exception.BusinessException;
 import team.gokiyeonmin.imacheater.global.exception.ErrorCode;
+import team.gokiyeonmin.imacheater.global.interceptor.annotation.UserId;
+import team.gokiyeonmin.imacheater.global.security.domain.CustomUserDetail;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -28,16 +31,23 @@ public class itemController {
 
     @PostMapping("/api/items")
     public ResponseEntity<ItemResponse> createItem(
-            @RequestPart("json") @Valid ItemEnrollRequest itemEnrollRequest,
-//            @Valid @RequestBody ItemEnrollRequest itemEnrollRequest
-            @RequestPart("images") List<MultipartFile> images
+//            @RequestPart("json") @Valid ItemEnrollRequest itemEnrollRequest,
+            @Valid @RequestPart("itemEnrollRequest") ItemEnrollRequest itemEnrollRequest,
+            @RequestPart("images") List<MultipartFile> images,
+            @AuthenticationPrincipal CustomUserDetail customUserDetail // 인증된 유저 정보
+//            @UserId Long userId
+
     ) {
         // 이미지가 한 개도 없는 경우 예외 처리
         if (images == null || images.isEmpty()) {
             throw new BusinessException(ErrorCode.ITEM_IMAGE_REQUIRED);
         }
 
-        ItemResponse itemResponse = itemService.enrollItem(itemEnrollRequest, images);
+        // 유저 정보 추출
+        String username = customUserDetail.getUsername();
+
+//        ItemResponse itemResponse = itemService.enrollItem(itemEnrollRequest, images);
+        ItemResponse itemResponse = itemService.enrollItem(itemEnrollRequest, images, username);
         return ResponseEntity.created(URI.create("/api/items")).body(itemResponse);
     }
 

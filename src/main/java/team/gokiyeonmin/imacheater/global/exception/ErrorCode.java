@@ -22,6 +22,7 @@ public enum ErrorCode {
     MISSING_REQUEST_PARAMETER(400_002, HttpStatus.BAD_REQUEST, "필수 요청 파라미터가 누락되었습니다."),
     MISSING_CONTENT_TYPE(400_003, HttpStatus.BAD_REQUEST, "컨텐츠 타입이 누락되었습니다."),
     ILLEGAL_CONTENT_TYPE(400_004, HttpStatus.BAD_REQUEST, "잘못된 컨텐츠 타입입니다."),
+    HTTP_MEDIA_TYPE_NOT_SUPPORTED(400_005, HttpStatus.BAD_REQUEST, "지원하지 않는 미디어타입입니다."),
     ILLEGAL_S3_URL(400_005, HttpStatus.BAD_REQUEST, "S3 URL이 잘못되었습니다."),
     ALREADY_EXISTS_USERNAME(400_100, HttpStatus.BAD_REQUEST, "이미 존재하는 아이디입니다."),
     ALREADY_EXISTS_NICKNAME(400_101, HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다."),
