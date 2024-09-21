@@ -53,9 +53,13 @@ public record ChatRoomsResponse(
             @JsonProperty("unreadCount")
             Integer unreadCount,
 
-            @Schema(description = "상대방 정보")
-            @JsonProperty("user")
-            UserDto user
+            @Schema(description = "상대방 닉네임")
+            @JsonProperty("nickname")
+            String nickname,
+
+            @Schema(description = "상대방 이미지 URL")
+            @JsonProperty("imageUrl")
+            String imageUrl
     ) {
 
         static ChatRoomDto of(
@@ -70,23 +74,9 @@ public record ChatRoomsResponse(
                     name,
                     preview,
                     unreadCount,
-                    UserDto.fromEntity(user)
+                    user.getNickname(),
+                    user.getUserImage().getUrl()
             );
-        }
-
-        private record UserDto(
-                Long id,
-                String nickname,
-                String imageUrl
-        ) {
-
-            static UserDto fromEntity(User user) {
-                return new UserDto(
-                        user.getId(),
-                        user.getNickname(),
-                        user.getUserImage().getUrl()
-                );
-            }
         }
     }
 
