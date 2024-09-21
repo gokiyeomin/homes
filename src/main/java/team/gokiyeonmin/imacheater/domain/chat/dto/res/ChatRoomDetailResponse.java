@@ -8,6 +8,7 @@ import team.gokiyeonmin.imacheater.domain.item.entity.Item;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Schema(description = "채팅방 상세 조회 응답")
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
@@ -22,12 +23,13 @@ public record ChatRoomDetailResponse(
 
     public static ChatRoomDetailResponse fromEntity(
             Item item,
-            List<ChatMessage> chatMessages
+            List<ChatMessage> chatMessages,
+            Long userId
     ) {
         ItemDto itemDto = new ItemDto(item.getId(), item.getTitle());
         List<ChatMessageDto> messages = chatMessages.stream()
                 .map(chatMessage -> new ChatMessageDto(
-                        chatMessage.getUser().getId(),
+                        Objects.equals(chatMessage.getUser().getId(), userId),
                         chatMessage.getContent(),
                         chatMessage.getCreatedAt()
                 ))
@@ -49,8 +51,8 @@ public record ChatRoomDetailResponse(
     @Schema(description = "채팅 메시지")
     @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
     record ChatMessageDto(
-            @Schema(description = "채팅 보낸 유저 ID", example = "1")
-            Long userId,
+            @Schema(description = "내가 보낸 채팅 여부", example = "true")
+            Boolean isMe,
 
             @Schema(description = "채팅 내용", example = "메시지: 안녕하세요.")
             String content,

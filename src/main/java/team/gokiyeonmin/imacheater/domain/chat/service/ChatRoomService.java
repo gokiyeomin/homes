@@ -76,7 +76,7 @@ public class ChatRoomService {
 
         List<ChatMessage> chatMessages = chatRoom.getChatMessages();
 
-        return ChatRoomDetailResponse.fromEntity(chatRoom.getItem(), chatMessages);
+        return ChatRoomDetailResponse.fromEntity(chatRoom.getItem(), chatMessages, userId);
     }
 
     private Boolean isChatRoomExist(ChatRoom chatRoom, User customer, User seller) {
