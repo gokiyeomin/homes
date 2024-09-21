@@ -2,6 +2,7 @@ package team.gokiyeonmin.imacheater.global.interceptor.handler;
 
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -14,6 +15,7 @@ import team.gokiyeonmin.imacheater.global.security.domain.CustomUserDetail;
 import team.gokiyeonmin.imacheater.global.security.service.CustomUserDetailService;
 import team.gokiyeonmin.imacheater.global.util.JwtUtil;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class WebSocketInterceptor implements ChannelInterceptor {
@@ -30,6 +32,7 @@ public class WebSocketInterceptor implements ChannelInterceptor {
 
         if (accessor != null && accessor.getCommand() == StompCommand.CONNECT) {
             String authorizationHeader = accessor.getFirstNativeHeader(JwtUtil.AUTHORIZATION);
+            log.info("WebSocketInterceptor Authorization Header: {}", authorizationHeader);
             String token = jwtUtil.extractToken(authorizationHeader);
             Claims claims = jwtUtil.parse(token);
 
