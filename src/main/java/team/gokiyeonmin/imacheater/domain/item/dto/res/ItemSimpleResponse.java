@@ -68,6 +68,7 @@ public record ItemSimpleResponse(
                 item.getId(),
                 item.getCreatedAt(),
                 item.getTitle(),
+                item.getName(),
                 item.getContent(),
                 thumbnailUrl,
                 item.getMoveInDate(),
