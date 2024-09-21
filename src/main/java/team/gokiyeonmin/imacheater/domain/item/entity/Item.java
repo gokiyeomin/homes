@@ -160,7 +160,7 @@ public class Item {
         if (request.windowDirection() != null && !this.windowDirection.equals(request.windowDirection())) {
             this.windowDirection = request.windowDirection();
         }
-        if (request.isSold() != null ) {  // && !this.isSold.equals(request.isSold())
+        if (request.isSold() != null && !this.isSold.equals(request.isSold())) {
             this.isSold = request.isSold();
         }
     }

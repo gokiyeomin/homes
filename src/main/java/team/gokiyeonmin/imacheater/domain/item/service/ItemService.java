@@ -136,6 +136,8 @@ public class ItemService {
                         .isThumbnail(false)
                         .build();
                 itemImageRepository.save(itemImage);
+
+                item.addImage(itemImage);
             }
         }
 
