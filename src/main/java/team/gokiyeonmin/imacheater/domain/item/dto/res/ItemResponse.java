@@ -1,5 +1,6 @@
 package team.gokiyeonmin.imacheater.domain.item.dto.res;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -20,8 +21,9 @@ public record ItemResponse(
         @JsonProperty("id")
         Long id,
 
-        @Schema(description = "글 작성 시간", example = "2024-01-01T12:34:56")
+        @Schema(description = "글 작성 시간", example = "2024-01-01 12:34:56")
         @JsonProperty("createdAt")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime createdAt,
 
         @Schema(description = "유저 이미지", example = "https://example.com/profile.jpg")
@@ -62,13 +64,15 @@ public record ItemResponse(
 
         @Schema(description = "입주 가능 날짜", example = "2024-01-01")
         @JsonProperty("moveInDate")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         LocalDate moveInDate,
 
         @Schema(description = "계약 완료 날짜", example = "2025-01-01")
         @JsonProperty("expirationDate")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         LocalDate expirationDate,
 
-        @Schema(description = "가까운 문", example = "EAST")
+        @Schema(description = "가까운 문", example = "NORTH")
         @JsonProperty("door")
         Door door,
 
@@ -98,6 +102,7 @@ public record ItemResponse(
         String userImageUrl = (item.getUser().getUserImage() != null)
                 ? item.getUser().getUserImage().getUrl()
                 : null;
+
 
         return new ItemResponse(
                 item.getId(),

@@ -1,5 +1,6 @@
 package team.gokiyeonmin.imacheater.domain.item.dto.res;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -19,6 +20,7 @@ public record ItemSimpleResponse(
 
         @Schema(description = "글 작성 시간", example = "2024-01-01T12:34:56")
         @JsonProperty("createdAt")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime createdAt,
 
         @Schema(description = "글 제목", example = "서울 강남구 아파트")
@@ -39,6 +41,7 @@ public record ItemSimpleResponse(
 
         @Schema(description = "입주 가능 날짜", example = "2024-01-01")
         @JsonProperty("moveInDate")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         LocalDate moveInDate,
 
         @Schema(description = "거래 완료 여부", example = "true")
