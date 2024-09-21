@@ -30,7 +30,7 @@ public class ChatController {
             ChatMessageSendRequest request
     ) {
         Long userId = getUserId(accessor);
-        chatMessageService.createMessage(roomId, request);
+        chatMessageService.createMessage(roomId, request, userId);
     }
 
     private Long getUserId(StompHeaderAccessor accessor) {
