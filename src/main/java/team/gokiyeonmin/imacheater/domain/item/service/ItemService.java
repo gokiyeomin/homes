@@ -35,6 +35,7 @@ public class ItemService {
     private final UserRepository userRepository;
     private final S3Util s3Util;
 
+    @Transactional
     public ItemResponse enrollItem(ItemEnrollRequest request, String username) {
         // username을 사용하여 User 엔티티 조회
         User user = userRepository.findByUsername(username)
@@ -59,6 +60,24 @@ public class ItemService {
         itemRepository.save(item);
 
         return ItemResponse.fromEntity(item);
+    }
+
+    @Transactional
+    public void uploadItemImages(Long itemId, List<MultipartFile> images) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
+
+        for (int i = 0; i < images.size(); i++) {
+            MultipartFile image = images.get(i);
+            String uploadedImageUrl = s3Util.uploadImage(S3Util.ITEM_IMAGE_FOLDER, image);
+
+            ItemImage itemImage = ItemImage.builder()
+                    .item(item)
+                    .url(uploadedImageUrl)
+                    .isThumbnail((i == 0))
+                    .build();
+            itemImageRepository.save(itemImage);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -173,13 +192,4 @@ public class ItemService {
         itemRepository.delete(item);
     }
 
-//    @Transactional
-//    public ItemResponse changeIsSold(Long itemId, Boolean isSold) {
-//        Item item = itemRepository.findById(itemId)
-//                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
-//
-//        item.changeSold(isSold);
-//
-//        return ItemResponse.fromEntity(item);
-//    }
 }

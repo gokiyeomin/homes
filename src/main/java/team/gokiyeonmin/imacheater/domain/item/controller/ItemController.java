@@ -21,13 +21,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class itemController {
+public class ItemController {
 
     private final ItemService itemService;
 
     @PostMapping("/api/items")
     public ResponseEntity<ItemResponse> createItem(
-            @Valid @RequestPart("itemEnrollRequest") ItemEnrollRequest itemEnrollRequest,
+            @Valid @RequestBody ItemEnrollRequest itemEnrollRequest,
             @AuthenticationPrincipal CustomUserDetail customUserDetail // 인증된 유저 정보
 
     ) {
@@ -36,6 +36,15 @@ public class itemController {
 
         ItemResponse itemResponse = itemService.enrollItem(itemEnrollRequest, username);
         return ResponseEntity.created(URI.create("/api/items")).body(itemResponse);
+    }
+
+    @PostMapping("/api/items/{itemId}/images")
+    public ResponseEntity<?> uploadItemImages(
+            @PathVariable Long itemId,
+            @RequestPart("images") List<MultipartFile> images
+    ) {
+        itemService.uploadItemImages(itemId, images);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/api/items")
