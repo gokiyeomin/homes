@@ -134,15 +134,17 @@ public class ItemService {
         }
 
         // 3. 새로운 이미지 업로드 및 추가
-        for (MultipartFile image : newImages) {
-            String uploadedImageUrl = s3Util.uploadImage(S3Util.ITEM_IMAGE_FOLDER, image);
+        if (newImages != null) {
+            for (MultipartFile image : newImages) {
+                String uploadedImageUrl = s3Util.uploadImage(S3Util.ITEM_IMAGE_FOLDER, image);
 
-            ItemImage itemImage = ItemImage.builder()
-                    .item(item)
-                    .url(uploadedImageUrl)
-                    .isThumbnail(false)
-                    .build();
-            itemImageRepository.save(itemImage);
+                ItemImage itemImage = ItemImage.builder()
+                        .item(item)
+                        .url(uploadedImageUrl)
+                        .isThumbnail(false)
+                        .build();
+                itemImageRepository.save(itemImage);
+            }
         }
 
         // 4. 첫 번째 이미지를 썸네일로 설정
