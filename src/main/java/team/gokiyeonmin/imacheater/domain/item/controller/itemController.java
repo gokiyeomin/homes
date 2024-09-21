@@ -12,14 +12,9 @@ import team.gokiyeonmin.imacheater.domain.item.dto.req.ItemEnrollRequest;
 import team.gokiyeonmin.imacheater.domain.item.dto.req.ItemUpdateRequest;
 import team.gokiyeonmin.imacheater.domain.item.dto.res.ItemResponse;
 import team.gokiyeonmin.imacheater.domain.item.dto.res.ItemSimpleResponse;
-import team.gokiyeonmin.imacheater.domain.item.entity.Item;
 import team.gokiyeonmin.imacheater.domain.item.service.ItemService;
-import team.gokiyeonmin.imacheater.global.exception.BusinessException;
-import team.gokiyeonmin.imacheater.global.exception.ErrorCode;
-import team.gokiyeonmin.imacheater.global.interceptor.annotation.UserId;
 import team.gokiyeonmin.imacheater.global.security.domain.CustomUserDetail;
 
-import javax.swing.*;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
@@ -32,23 +27,14 @@ public class itemController {
 
     @PostMapping("/api/items")
     public ResponseEntity<ItemResponse> createItem(
-//            @RequestPart("json") @Valid ItemEnrollRequest itemEnrollRequest,
             @Valid @RequestPart("itemEnrollRequest") ItemEnrollRequest itemEnrollRequest,
-            @RequestPart("images") List<MultipartFile> images,
             @AuthenticationPrincipal CustomUserDetail customUserDetail // 인증된 유저 정보
-//            @UserId Long userId
 
     ) {
-        // 이미지가 한 개도 없는 경우 예외 처리
-        if (images == null || images.isEmpty()) {
-            throw new BusinessException(ErrorCode.ITEM_IMAGE_REQUIRED);
-        }
-
         // 유저 정보 추출
         String username = customUserDetail.getUsername();
 
-//        ItemResponse itemResponse = itemService.enrollItem(itemEnrollRequest, images);
-        ItemResponse itemResponse = itemService.enrollItem(itemEnrollRequest, images, username);
+        ItemResponse itemResponse = itemService.enrollItem(itemEnrollRequest, username);
         return ResponseEntity.created(URI.create("/api/items")).body(itemResponse);
     }
 
@@ -72,14 +58,6 @@ public class itemController {
         );
         return ResponseEntity.ok(items);
     }
-
-//    @GetMapping("/api/items")
-//    public Item getItem(
-//            @ItemId Long itemId
-//    ) {
-//        return itemService.getItem(itemId);
-//    }
-
 
     @GetMapping("/api/items/{itemId}")
     public ResponseEntity<ItemResponse> getItem(
@@ -106,13 +84,4 @@ public class itemController {
         itemService.deleteItem(itemId);
         return ResponseEntity.noContent().build();
     }
-
-//    @PatchMapping("/api/items/{itemId}/status/sold")
-//    public ResponseEntity<ItemResponse> changeItemSoldStatus(
-//            @PathVariable Long itemId,
-//            @RequestBody Boolean isSold
-//    ) {
-//        ItemResponse updatedItem = itemService.changeIsSold(itemId, isSold);
-//        return ResponseEntity.ok(updatedItem);
-//    }
 }

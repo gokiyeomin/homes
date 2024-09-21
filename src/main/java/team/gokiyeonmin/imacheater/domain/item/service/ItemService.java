@@ -9,7 +9,6 @@ import team.gokiyeonmin.imacheater.domain.Direction;
 import team.gokiyeonmin.imacheater.domain.item.Door;
 import team.gokiyeonmin.imacheater.domain.item.dto.req.ItemEnrollRequest;
 import team.gokiyeonmin.imacheater.domain.item.dto.req.ItemUpdateRequest;
-import team.gokiyeonmin.imacheater.domain.item.dto.res.ItemImageResponse;
 import team.gokiyeonmin.imacheater.domain.item.dto.res.ItemResponse;
 import team.gokiyeonmin.imacheater.domain.item.dto.res.ItemSimpleResponse;
 import team.gokiyeonmin.imacheater.domain.item.entity.Item;
@@ -17,10 +16,7 @@ import team.gokiyeonmin.imacheater.domain.item.entity.ItemImage;
 import team.gokiyeonmin.imacheater.domain.item.repository.ItemImageRepository;
 import team.gokiyeonmin.imacheater.domain.item.repository.ItemRepository;
 import team.gokiyeonmin.imacheater.domain.item.repository.ItemSpecification;
-import team.gokiyeonmin.imacheater.domain.user.dto.res.UserImageResponse;
 import team.gokiyeonmin.imacheater.domain.user.entity.User;
-import team.gokiyeonmin.imacheater.domain.user.entity.UserImage;
-import team.gokiyeonmin.imacheater.domain.user.event.RollbackUploadedImageEvent;
 import team.gokiyeonmin.imacheater.domain.user.repository.UserRepository;
 import team.gokiyeonmin.imacheater.global.exception.BusinessException;
 import team.gokiyeonmin.imacheater.global.exception.ErrorCode;
@@ -39,7 +35,7 @@ public class ItemService {
     private final UserRepository userRepository;
     private final S3Util s3Util;
 
-    public ItemResponse enrollItem(ItemEnrollRequest request, List<MultipartFile> images, String username) {
+    public ItemResponse enrollItem(ItemEnrollRequest request, String username) {
         // username을 사용하여 User 엔티티 조회
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
@@ -62,28 +58,15 @@ public class ItemService {
                 .build();
         itemRepository.save(item);
 
-        // 이미지 처리 및 S3 업로드
-        for (int i = 0; i < images.size(); i++) {
-            MultipartFile image = images.get(i);
-            String uploadedImageUrl = s3Util.uploadImage(S3Util.ITEM_IMAGE_FOLDER, image);
-
-            ItemImage itemImage = ItemImage.builder()
-                    .item(item)
-                    .url(uploadedImageUrl)
-                    .isThumbnail((i == 0))  // 첫 번째 이미지를 썸네일로 설정
-                    .build();
-            itemImageRepository.save(itemImage);
-        }
-
         return ItemResponse.fromEntity(item);
     }
 
     @Transactional(readOnly = true)
     public ItemResponse getItem(Long itemId) {
-         Item item = itemRepository.findById(itemId)
+        Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
 
-         return ItemResponse.fromEntity(item);
+        return ItemResponse.fromEntity(item);
     }
 
     @Transactional(readOnly = true)
@@ -108,7 +91,7 @@ public class ItemService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
 
         // 2. 삭제된 이미지 처리
-        List<String> deletedImageUrls = request .deletedImageUrls();
+        List<String> deletedImageUrls = request.deletedImageUrls();
         if (deletedImageUrls != null) {
             for (String deletedImageUrl : deletedImageUrls) {
                 // 삭제할 이미지 가져오기
