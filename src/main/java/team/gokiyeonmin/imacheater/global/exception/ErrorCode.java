@@ -25,6 +25,10 @@ public enum ErrorCode {
     ILLEGAL_S3_URL(400_005, HttpStatus.BAD_REQUEST, "S3 URL이 잘못되었습니다."),
     ALREADY_EXISTS_USERNAME(400_100, HttpStatus.BAD_REQUEST, "이미 존재하는 아이디입니다."),
     ALREADY_EXISTS_NICKNAME(400_101, HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다."),
+    NOT_FOUND_USER(400_102, HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다."),
+    NOT_FOUND_ITEM(400_200, HttpStatus.BAD_REQUEST, "매물을 찾을 수 없습니다."),
+    ITEM_IMAGE_REQUIRED(400_201, HttpStatus.BAD_REQUEST, "이미지가 필요합니다."),
+    NOT_FOUND_ITEM_IMAGE(400_202, HttpStatus.BAD_REQUEST, "매물 이미지를 찾을 수 없습니다."),
     FORBIDDEN_CHAT_ROOM(400_300, HttpStatus.BAD_REQUEST, "채팅방에 입장할 수 없습니다."),
 
     // 401 Unauthorized
