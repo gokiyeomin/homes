@@ -160,14 +160,14 @@ public class Item {
         if (request.windowDirection() != null && !this.windowDirection.equals(request.windowDirection())) {
             this.windowDirection = request.windowDirection();
         }
-        if (request.isSold() != null && !this.isSold.equals(request.isSold())) {
+        if (request.isSold() != null ) {  // && !this.isSold.equals(request.isSold())
             this.isSold = request.isSold();
         }
     }
 
-    public void changeSold(Boolean isSold) {
-        this.isSold = isSold;
-    }
+//    public void changeSold(Boolean isSold) {
+//        this.isSold = isSold;
+//    }
 
     public void addImage(ItemImage itemImage) {
         if (itemImage != null && !this.itemImages.contains(itemImage)) {
@@ -179,19 +179,19 @@ public class Item {
         this.itemImages.removeIf(image -> image.getId().equals(itemImageId));
     }
 
-    public void updateImage(Long itemImageId, String newUrl) {
-        this.itemImages.stream()
-                .filter(image -> image.getId().equals(itemImageId))
-                .findFirst()
-                .ifPresent(image -> image.updateUrl(newUrl));
-    }
-
-    public void changeThumbnailImage(Long itemImageId) {
-        this.itemImages.forEach(image -> image.changeThumbnail(false));
-
-        this.itemImages.stream()
-                .filter(image -> image.getId().equals(itemImageId))
-                .findFirst()
-                .ifPresent(image -> image.changeThumbnail(true));
-    }
+//    public void updateImage(Long itemImageId, String newUrl) {
+//        this.itemImages.stream()
+//                .filter(image -> image.getId().equals(itemImageId))
+//                .findFirst()
+//                .ifPresent(image -> image.updateUrl(newUrl));
+//    }
+//
+//    public void changeThumbnailImage(Long itemImageId) {
+//        this.itemImages.forEach(image -> image.changeThumbnail(false));
+//
+//        this.itemImages.stream()
+//                .filter(image -> image.getId().equals(itemImageId))
+//                .findFirst()
+//                .ifPresent(image -> image.changeThumbnail(true));
+//    }
 }

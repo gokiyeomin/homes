@@ -162,13 +162,13 @@ public class ItemService {
         itemRepository.delete(item);
     }
 
-    @Transactional
-    public ItemResponse changeIsSold(Long itemId, Boolean isSold) {
-        Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
-
-        item.changeSold(isSold);
-
-        return ItemResponse.fromEntity(item);
-    }
+//    @Transactional
+//    public ItemResponse changeIsSold(Long itemId, Boolean isSold) {
+//        Item item = itemRepository.findById(itemId)
+//                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
+//
+//        item.changeSold(isSold);
+//
+//        return ItemResponse.fromEntity(item);
+//    }
 }
