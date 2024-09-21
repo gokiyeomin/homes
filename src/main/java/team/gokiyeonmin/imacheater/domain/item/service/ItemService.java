@@ -18,8 +18,10 @@ import team.gokiyeonmin.imacheater.domain.item.repository.ItemImageRepository;
 import team.gokiyeonmin.imacheater.domain.item.repository.ItemRepository;
 import team.gokiyeonmin.imacheater.domain.item.repository.ItemSpecification;
 import team.gokiyeonmin.imacheater.domain.user.dto.res.UserImageResponse;
+import team.gokiyeonmin.imacheater.domain.user.entity.User;
 import team.gokiyeonmin.imacheater.domain.user.entity.UserImage;
 import team.gokiyeonmin.imacheater.domain.user.event.RollbackUploadedImageEvent;
+import team.gokiyeonmin.imacheater.domain.user.repository.UserRepository;
 import team.gokiyeonmin.imacheater.global.exception.BusinessException;
 import team.gokiyeonmin.imacheater.global.exception.ErrorCode;
 import team.gokiyeonmin.imacheater.global.util.S3Util;
@@ -33,9 +35,14 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final ItemImageRepository itemImageRepository;
+    private final UserRepository userRepository;
     private final S3Util s3Util;
 
-    public ItemResponse enrollItem(ItemEnrollRequest request, List<MultipartFile> images) {
+    public ItemResponse enrollItem(ItemEnrollRequest request, List<MultipartFile> images, String username) {
+        // username을 사용하여 User 엔티티 조회
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
+
         // 매물 저장
         Item item = Item.builder()
                 .title(request.title())
@@ -50,6 +57,7 @@ public class ItemService {
                 .floor(request.floor())
                 .roomCount(request.roomCount())
                 .windowDirection(request.windowDirection())
+                .user(user)
                 .build();
         itemRepository.save(item);
 

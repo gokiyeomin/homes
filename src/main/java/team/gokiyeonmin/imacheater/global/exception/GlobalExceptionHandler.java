@@ -1,7 +1,9 @@
 package team.gokiyeonmin.imacheater.global.exception;
 
+import jakarta.persistence.ElementCollection;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -49,5 +51,13 @@ public class GlobalExceptionHandler {
         System.out.println("Token Exception: " + e.getMessage());
         final ErrorResponse response = ErrorResponse.of(e.getErrorCode());
         return ResponseEntity.status(e.getErrorCode().getHttpStatus()).body(response);
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> httpMediaTypeNotSupportedExceptionHandler(HttpMediaTypeNotSupportedException e) {
+        log.error("HttpMediaTypeNotSupportedException: {}", e.getMessage());
+//        System.out.println("HttpMediaTypeNotSupportedException: " + e.getMessage());
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.HTTP_MEDIA_TYPE_NOT_SUPPORTED);
+        return ResponseEntity.badRequest().body(response);
     }
 }

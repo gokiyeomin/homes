@@ -73,7 +73,7 @@ public class Item {
     @Column(name = "window_direction", nullable = false)
     private Direction windowDirection;
 
-    @Column(name="is_sold", nullable = false)
+    @Column(name = "is_sold", nullable = false)
     private Boolean isSold = false;
 
     /* -------------------------------------------- */
@@ -91,7 +91,6 @@ public class Item {
     /* -------------------------------------------- */
     @Builder
     public Item(
-            LocalDateTime createdAt,
             String title,
             String content,
             String address,
@@ -103,9 +102,9 @@ public class Item {
             Door door,
             Long floor,
             Long roomCount,
-            Direction windowDirection
+            Direction windowDirection,
+            User user
     ) {
-        this.createdAt = createdAt;
         this.title = title;
         this.content = content;
         this.address = address;
@@ -118,6 +117,8 @@ public class Item {
         this.floor = floor;
         this.roomCount = roomCount;
         this.windowDirection = windowDirection;
+        this.user = user;
+        this.createdAt = LocalDateTime.now();
     }
 
     // 뭘 업데이트 가능하게 할건지?
