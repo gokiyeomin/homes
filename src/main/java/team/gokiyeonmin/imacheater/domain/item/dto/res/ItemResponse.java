@@ -33,6 +33,10 @@ public record ItemResponse(
         @JsonProperty("title")
         String title,
 
+        @Schema(description = "매물 이름", example = "레전드")
+        @JsonProperty("name")
+        String name,
+
         @Schema(description = "글 본문", example = "서울 강남구에 위치한 넓고 쾌적한 아파트입니다.")
         @JsonProperty("content")
         String content,
@@ -112,6 +116,7 @@ public record ItemResponse(
                 item.getId(),
                 item.getCreatedAt(),
                 item.getTitle(),
+                item.getName(),
                 item.getContent(),
                 item.getAddress(),
                 item.getDeposit(),

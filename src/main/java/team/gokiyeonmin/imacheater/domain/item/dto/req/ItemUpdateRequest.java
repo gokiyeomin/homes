@@ -15,6 +15,12 @@ import java.util.List;
 @Schema(description = "매물 정보 수정 요청")
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public record ItemUpdateRequest(
+        @JsonProperty("name")
+        @Schema(description = "매물 이름", example = "아파트")
+        @NotNull(message = "매물 이름은 필수입니다.")
+        @NotBlank(message = "매물 이름은 필수입니다.")
+        String name,
+
         @JsonProperty("title")
         @Schema(description = "매물 제목", example = "서울 강남구 아파트")
         @NotNull(message = "매물 제목은 필수입니다.")

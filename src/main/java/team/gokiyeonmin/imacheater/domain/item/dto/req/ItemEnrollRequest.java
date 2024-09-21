@@ -6,12 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.web.multipart.MultipartFile;
 import team.gokiyeonmin.imacheater.domain.Direction;
 import team.gokiyeonmin.imacheater.domain.item.Door;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Schema(description = "매물 등록 요청")
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
@@ -21,6 +19,12 @@ public record ItemEnrollRequest(
         @NotNull(message = "매물 제목은 필수입니다.")
         @NotBlank(message = "매물 제목은 필수입니다.")
         String title,
+
+        @JsonProperty("name")
+        @Schema(description = "매물 이름", example = "아파트")
+        @NotNull(message = "매물 이름은 필수입니다.")
+        @NotBlank(message = "매물 이름은 필수입니다.")
+        String name,
 
         @JsonProperty("content")
         @Schema(description = "매물 설명", example = "서울 강남구에 위치한 넓고 쾌적한 아파트입니다.")

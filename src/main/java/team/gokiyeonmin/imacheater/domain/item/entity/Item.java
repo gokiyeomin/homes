@@ -5,21 +5,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import team.gokiyeonmin.imacheater.domain.Direction;
 import team.gokiyeonmin.imacheater.domain.item.Door;
 import team.gokiyeonmin.imacheater.domain.item.dto.req.ItemUpdateRequest;
-import team.gokiyeonmin.imacheater.domain.user.Role;
 import team.gokiyeonmin.imacheater.domain.user.entity.User;
-import team.gokiyeonmin.imacheater.domain.user.entity.UserImage;
-import team.gokiyeonmin.imacheater.domain.user.entity.UserRole;
-import team.gokiyeonmin.imacheater.global.exception.BusinessException;
-import team.gokiyeonmin.imacheater.global.exception.ErrorCode;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Entity
@@ -40,6 +33,9 @@ public class Item {
 
     @Column(name = "title", length = 50, nullable = false)
     private String title;
+
+    @Column(name = "name", length = 10, nullable = false)
+    private String name;
 
     @Column(name = "content", columnDefinition = "TEXT", nullable = false)
     private String content;
@@ -92,6 +88,7 @@ public class Item {
     @Builder
     public Item(
             String title,
+            String name,
             String content,
             String address,
             Long deposit,
@@ -106,6 +103,7 @@ public class Item {
             User user
     ) {
         this.title = title;
+        this.name = name;
         this.content = content;
         this.address = address;
         this.deposit = deposit;
@@ -126,6 +124,9 @@ public class Item {
     public void updateInfo(ItemUpdateRequest request) {
         if (request.title() != null && !this.title.equals(request.title())) {
             this.title = request.title();
+        }
+        if (request.name() != null && !this.name.equals(request.name())) {
+            this.name = request.name();
         }
         if (request.content() != null && !this.content.equals(request.content())) {
             this.content = request.content();
@@ -165,10 +166,6 @@ public class Item {
         }
     }
 
-//    public void changeSold(Boolean isSold) {
-//        this.isSold = isSold;
-//    }
-
     public void addImage(ItemImage itemImage) {
         if (itemImage != null && !this.itemImages.contains(itemImage)) {
             this.itemImages.add(itemImage);
@@ -183,19 +180,4 @@ public class Item {
         this.itemImages = itemImages;
     }
 
-//    public void updateImage(Long itemImageId, String newUrl) {
-//        this.itemImages.stream()
-//                .filter(image -> image.getId().equals(itemImageId))
-//                .findFirst()
-//                .ifPresent(image -> image.updateUrl(newUrl));
-//    }
-//
-//    public void changeThumbnailImage(Long itemImageId) {
-//        this.itemImages.forEach(image -> image.changeThumbnail(false));
-//
-//        this.itemImages.stream()
-//                .filter(image -> image.getId().equals(itemImageId))
-//                .findFirst()
-//                .ifPresent(image -> image.changeThumbnail(true));
-//    }
 }
