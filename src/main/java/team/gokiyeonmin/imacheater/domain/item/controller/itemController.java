@@ -19,6 +19,7 @@ import team.gokiyeonmin.imacheater.global.exception.ErrorCode;
 import team.gokiyeonmin.imacheater.global.interceptor.annotation.UserId;
 import team.gokiyeonmin.imacheater.global.security.domain.CustomUserDetail;
 
+import javax.swing.*;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
@@ -62,11 +63,12 @@ public class itemController {
             @RequestParam(required = false) Long minRent,
             @RequestParam(required = false) Long maxRent,
             @RequestParam(required = false) Boolean maintenanceFeeIncluded,
-            @RequestParam(required = false) LocalDate moveInDate
+            @RequestParam(required = false) LocalDate moveInDate,
+            @RequestParam(required = false) Boolean isSold
     ) {
         List<ItemSimpleResponse> items = itemService.searchSimpleItems(
                 door, floor, roomCount, windowDirection, minDeposit,
-                maxDeposit, minRent, maxRent, maintenanceFeeIncluded, moveInDate
+                maxDeposit, minRent, maxRent, maintenanceFeeIncluded, moveInDate, isSold
         );
         return ResponseEntity.ok(items);
     }

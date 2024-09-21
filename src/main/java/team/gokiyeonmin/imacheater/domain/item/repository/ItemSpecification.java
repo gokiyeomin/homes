@@ -14,7 +14,7 @@ public class ItemSpecification {
 
     public static Specification<Item> withFilters(Door door, Long floor, Long roomCount, Direction windowDirection,
                                                   Long minDeposit, Long maxDeposit, Long minRent, Long maxRent,
-                                                  Boolean maintenanceFeeIncluded, LocalDate moveInDate) {
+                                                  Boolean maintenanceFeeIncluded, LocalDate moveInDate, Boolean isSold) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -41,6 +41,9 @@ public class ItemSpecification {
             }
             if (moveInDate != null) {
                 predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("moveInDate"), moveInDate));
+            }
+            if (isSold != null) {
+                predicates.add(criteriaBuilder.equal(root.get("isSold"), isSold));
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

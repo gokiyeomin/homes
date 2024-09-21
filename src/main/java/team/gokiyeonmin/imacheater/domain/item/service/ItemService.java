@@ -88,11 +88,12 @@ public class ItemService {
     @Transactional(readOnly = true)
     public List<ItemSimpleResponse> searchSimpleItems(Door door, Long floor, Long roomCount, Direction windowDirection,
                                                       Long minDeposit, Long maxDeposit, Long minRent, Long maxRent,
-                                                      Boolean maintenanceFeeIncluded, LocalDate moveInDate) {
+                                                      Boolean maintenanceFeeIncluded, LocalDate moveInDate,
+                                                      Boolean isSold) {
 
         Specification<Item> specification = ItemSpecification.withFilters(door, floor, roomCount, windowDirection,
                 minDeposit, maxDeposit, minRent, maxRent,
-                maintenanceFeeIncluded, moveInDate);
+                maintenanceFeeIncluded, moveInDate, isSold);
 
         return itemRepository.findAll(specification).stream()
                 .map(ItemSimpleResponse::fromEntity)

@@ -58,7 +58,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create  # TODO: 어느정도 시간 지나면, validate로 변경
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     properties:
