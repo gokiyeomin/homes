@@ -29,6 +29,7 @@ public enum ErrorCode {
     NOT_FOUND_ITEM(400_200, HttpStatus.BAD_REQUEST, "매물을 찾을 수 없습니다."),
     ITEM_IMAGE_REQUIRED(400_201, HttpStatus.BAD_REQUEST, "이미지가 필요합니다."),
     NOT_FOUND_ITEM_IMAGE(400_202, HttpStatus.BAD_REQUEST, "매물 이미지를 찾을 수 없습니다."),
+    FORBIDDEN_CHAT_ROOM(400_300, HttpStatus.BAD_REQUEST, "채팅방에 입장할 수 없습니다."),
 
     // 401 Unauthorized
     ILLEGAL_TOKEN(401_000, HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
@@ -41,7 +42,11 @@ public enum ErrorCode {
     ACCESS_DENIED(403_000, HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
 
     // 404 Not Found
-    NOT_FOUND_USER_ROLE(400_100, HttpStatus.NOT_FOUND, "사용자 권한이 존재하지 않습니다."),
+    NOT_FOUND_USER_ROLE(404_100, HttpStatus.NOT_FOUND, "사용자 권한이 존재하지 않습니다."),
+    NOT_FOUND_USER(404_101, HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),
+    NOT_FOUND_ITEM(404_200, HttpStatus.NOT_FOUND, "매물을 찾을 수 없습니다."),
+    NOT_FOUND_CHAT_MESSAGE_CONTENT(404_300, HttpStatus.NOT_FOUND, "채팅 메시지 컨텐츠를 찾을 수 없습니다."),
+    NOT_FOUND_CHAT_ROOM(404_301, HttpStatus.NOT_FOUND, "채팅방을 찾을 수 없습니다."),
 
     // 405 Method Not Allowed
 
