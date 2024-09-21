@@ -3,6 +3,7 @@ package team.gokiyeonmin.imacheater.domain.chat.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import team.gokiyeonmin.imacheater.domain.chat.dto.req.ChatRoomIdRequest;
 import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomDetailResponse;
 import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomIdResponse;
 import team.gokiyeonmin.imacheater.domain.chat.dto.res.ChatRoomsResponse;
@@ -31,10 +32,10 @@ public class ChatRoomService {
     private final ChatRoomUserRepository chatRoomUserRepository;
 
     @Transactional
-    public ChatRoomIdResponse getChatRoomId(Long customerId, Long itemId) {
+    public ChatRoomIdResponse getChatRoomId(Long customerId, ChatRoomIdRequest request) {
         User customer = userRepository.findById(customerId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
-        Item item = itemRepository.findById(itemId)
+        Item item = itemRepository.findById(request.itemId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
         User seller = item.getUser();
 
