@@ -14,6 +14,7 @@ import team.gokiyeonmin.imacheater.domain.item.dto.res.ItemImagesResponse;
 import team.gokiyeonmin.imacheater.domain.item.dto.res.ItemResponse;
 import team.gokiyeonmin.imacheater.domain.item.dto.res.ItemSimpleResponse;
 import team.gokiyeonmin.imacheater.domain.item.service.ItemService;
+import team.gokiyeonmin.imacheater.global.interceptor.annotation.UserId;
 import team.gokiyeonmin.imacheater.global.security.domain.CustomUserDetail;
 
 import java.net.URI;
@@ -30,7 +31,6 @@ public class ItemController {
     public ResponseEntity<ItemResponse> createItem(
             @Valid @RequestBody ItemEnrollRequest itemEnrollRequest,
             @AuthenticationPrincipal CustomUserDetail customUserDetail // 인증된 유저 정보
-
     ) {
         // 유저 정보 추출
         String username = customUserDetail.getUsername();
@@ -83,6 +83,14 @@ public class ItemController {
     ) {
         ItemImagesResponse itemImageResponse = itemService.getItemImages(itemId);
         return ResponseEntity.ok(itemImageResponse);
+    }
+
+    @GetMapping("/api/items/my")
+    public ResponseEntity<List<ItemSimpleResponse>> getMyItems(
+            @UserId Long userId
+    ) {
+        List<ItemSimpleResponse> myItems = itemService.getMyItems(userId);
+        return ResponseEntity.ok(myItems);
     }
 
     @PutMapping("/api/items/{itemId}")

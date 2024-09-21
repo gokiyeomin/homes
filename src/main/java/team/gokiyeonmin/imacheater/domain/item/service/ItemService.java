@@ -114,6 +114,16 @@ public class ItemService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<ItemSimpleResponse> getMyItems(Long userId) {
+        List<Item> items = itemRepository.findByUserId(userId);
+
+        // 조회된 매물 목록을 ItemSimpleResponse로 변환하여 반환
+        return items.stream()
+                .map(ItemSimpleResponse::fromEntity)
+                .toList();
+    }
+
     @Transactional
     public ItemResponse updateItem(Long itemId, ItemUpdateRequest request, List<MultipartFile> newImages) {
         // 1. 매물정보 가져옴
