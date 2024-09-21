@@ -16,7 +16,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.cors.CorsConfigurationSource;
-import team.gokiyeonmin.imacheater.global.security.domain.SecurityConstant;
 import team.gokiyeonmin.imacheater.global.security.filter.GlobalLoggerFilter;
 import team.gokiyeonmin.imacheater.global.security.filter.JwtAuthenticationFilter;
 import team.gokiyeonmin.imacheater.global.security.filter.JwtExceptionFilter;
@@ -67,8 +66,7 @@ public class SecurityConfig {
         httpSecurity
                 .authorizeHttpRequests(request ->
                         request
-                                .requestMatchers(SecurityConstant.NO_NEED_AUTHENTICATION).permitAll()
-                                .anyRequest().authenticated());
+                                .anyRequest().permitAll());
 
         httpSecurity
                 .addFilterBefore(
