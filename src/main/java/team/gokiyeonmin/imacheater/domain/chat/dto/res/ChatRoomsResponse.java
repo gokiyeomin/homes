@@ -5,7 +5,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import team.gokiyeonmin.imacheater.domain.chat.entity.ChatRoom;
+import team.gokiyeonmin.imacheater.domain.chat.entity.ChatRoomUser;
 import team.gokiyeonmin.imacheater.domain.user.entity.User;
+import team.gokiyeonmin.imacheater.global.exception.BusinessException;
+import team.gokiyeonmin.imacheater.global.exception.ErrorCode;
 import team.gokiyeonmin.imacheater.global.util.Pair;
 
 import java.util.List;
@@ -21,7 +24,15 @@ public record ChatRoomsResponse(
         return new ChatRoomsResponse(pairs.stream()
                 .map(pair -> {
                     ChatRoom chatRoom = pair.first();
-                    User user = pair.second();
+                    User me = pair.second();
+
+                    ChatRoomUser _chatRoomUser = chatRoom.getChatRoomUsers().stream()
+                            .filter(chatRoomUser -> chatRoomUser.getUser().getId() != me.getId())
+                            .findFirst()
+                            .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_CHAT_ROOM));
+
+                    User user = _chatRoomUser.getUser();
+
                     return ChatRoomDto.of(
                             chatRoom.getId(),
                             chatRoom.getTitle(),

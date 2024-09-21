@@ -52,6 +52,14 @@ public class ChatRoomService {
     @Transactional(readOnly = true)
     public ChatRoomsResponse getAllChatRooms(Long userId) {
         List<ChatRoom> chatRooms = chatRoomRepository.findAllByUser_Id(userId);
+        List<User> users = chatRooms.stream().map(
+                        chatRoom -> chatRoom.getChatRoomUsers().stream()
+                                .filter(chatRoomUser -> chatRoomUser.getUser().getId() != userId)
+                                .findFirst()
+                                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_CHAT_ROOM))
+                ).map(ChatRoomUser::getUser)
+                .toList();
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
 
