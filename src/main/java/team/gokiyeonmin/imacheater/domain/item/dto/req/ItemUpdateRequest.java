@@ -83,8 +83,10 @@ public record ItemUpdateRequest(
         @NotNull(message = "거래완료 여부는 필수입니다.")
         Boolean isSold,
 
+
+        // 삭제된 이미지 Url들
         @JsonProperty("deletedImageUrls")
         @Schema(description = "삭제된 이미지 Url들", example = "[https://imageCdnAddress.com/folder/imageName.jpg]")
-        List<Long> deletedImageUrls
+        List<String> deletedImageUrls
 ) {
 }

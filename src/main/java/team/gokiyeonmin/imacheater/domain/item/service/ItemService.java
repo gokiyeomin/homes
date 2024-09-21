@@ -107,21 +107,21 @@ public class ItemService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
 
         // 2. 삭제된 이미지 처리
-        List<Long> deletedImageUrls = request .deletedImageUrls();
+        List<String> deletedImageUrls = request .deletedImageUrls();
         if (deletedImageUrls != null) {
-            for (Long imageId : deletedImageUrls) {
+            for (String deletedImageUrl : deletedImageUrls) {
                 // 삭제할 이미지 가져오기
-                ItemImage itemImage = item.getItemImages().stream()
-                        .filter(image -> image.getId().equals(imageId))
+                ItemImage deletedItemImage = item.getItemImages().stream()
+                        .filter(image -> image.getUrl().equals(deletedImageUrl))
                         .findFirst()
                         .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM_IMAGE));
 
                 // S3에서 이미지 삭제
-                s3Util.deleteImage(itemImage.getUrl());
+                s3Util.deleteImage(deletedItemImage.getUrl());
 
                 // DB에서 이미지 삭제
-                item.removeImage(imageId);
-                itemImageRepository.deleteById(imageId);
+                item.removeImage(deletedItemImage.getId());
+                itemImageRepository.deleteById(deletedItemImage.getId());
             }
         }
 
