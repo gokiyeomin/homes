@@ -47,6 +47,7 @@ public class ItemService {
                 .title(request.title())
                 .content(request.content())
                 .address(request.address())
+                .name(request.name())
                 .deposit(request.deposit())
                 .rent(request.rent())
                 .maintenanceFeeIncluded(request.maintenanceFeeIncluded())
