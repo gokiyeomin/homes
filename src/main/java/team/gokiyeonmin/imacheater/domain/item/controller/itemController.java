@@ -107,12 +107,12 @@ public class itemController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/api/items/{itemId}/status/sold")
-    public ResponseEntity<ItemResponse> changeItemSoldStatus(
-            @PathVariable Long itemId,
-            @RequestBody Boolean isSold
-    ) {
-        ItemResponse updatedItem = itemService.changeIsSold(itemId, isSold);
-        return ResponseEntity.ok(updatedItem);
-    }
+//    @PatchMapping("/api/items/{itemId}/status/sold")
+//    public ResponseEntity<ItemResponse> changeItemSoldStatus(
+//            @PathVariable Long itemId,
+//            @RequestBody Boolean isSold
+//    ) {
+//        ItemResponse updatedItem = itemService.changeIsSold(itemId, isSold);
+//        return ResponseEntity.ok(updatedItem);
+//    }
 }

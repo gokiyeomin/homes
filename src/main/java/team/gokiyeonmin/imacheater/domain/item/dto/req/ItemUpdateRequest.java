@@ -78,6 +78,11 @@ public record ItemUpdateRequest(
         @NotNull(message = "창문 방향은 필수입니다.")
         Direction windowDirection,
 
+        @JsonProperty("isSold")
+        @Schema(description = "거래완료 여부", example = "true")
+        @NotNull(message = "거래완료 여부는 필수입니다.")
+        Boolean isSold,
+
         @JsonProperty("deletedImageUrls")
         @Schema(description = "삭제된 이미지 Url들", example = "[https://imageCdnAddress.com/folder/imageName.jpg]")
         List<Long> deletedImageUrls
