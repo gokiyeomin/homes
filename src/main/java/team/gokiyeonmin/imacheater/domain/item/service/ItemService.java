@@ -27,6 +27,7 @@ import team.gokiyeonmin.imacheater.global.exception.ErrorCode;
 import team.gokiyeonmin.imacheater.global.util.S3Util;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -141,7 +142,26 @@ public class ItemService {
             }
         }
 
-        // 4. 첫 번째 이미지를 썸네일로 설정
+        // 4. 이미지 순서 업데이트
+        List<String> imageOrder = request.imageOrder();
+        if (imageOrder != null && !imageOrder.isEmpty()) {
+            List<ItemImage> orderedImages = new ArrayList<>();
+
+            // 이미지 순서에 맞게 재정렬
+            for (String imageUrl : imageOrder) {
+                item.getItemImages().stream()
+                        .filter(image -> image.getUrl().equals(imageUrl))
+                        .findFirst()
+                        .ifPresent(orderedImages::add);
+            }
+
+            // 기존 순서와 일치하지 않는다면 리스트 업데이트
+            if (!orderedImages.equals(item.getItemImages())) {
+                item.setItemImages(orderedImages);  // itemImages 리스트에 새로운 순서를 반영
+            }
+        }
+
+        // 5. 첫 번째 이미지를 썸네일로 설정
         List<ItemImage> itemImages = item.getItemImages();
 
         if (!itemImages.isEmpty()) {
@@ -149,7 +169,7 @@ public class ItemService {
             itemImages.get(0).changeThumbnail(true);  // 첫 번째 이미지를 썸네일로 설정
         }
 
-        // 5. 나머지 아이템 정보 업데이트
+        // 6. 나머지 아이템 정보 업데이트
         item.updateInfo(request);
         itemRepository.save(item);
 

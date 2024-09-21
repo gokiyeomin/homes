@@ -84,7 +84,14 @@ public record ItemUpdateRequest(
         Boolean isSold,
 
 
-        // 삭제된 이미지 Url들
+        // ----------------------------
+        // Item 엔티티 필드 외
+        // ---------------------------
+
+        @JsonProperty("imageOrder")
+        @Schema(description = "이미지 순서", example = "[\"https://image1.com\", \"https://image2.com\"]")
+        List<String> imageOrder,
+
         @JsonProperty("deletedImageUrls")
         @Schema(description = "삭제된 이미지 Url들", example = "[https://imageCdnAddress.com/folder/imageName.jpg]")
         List<String> deletedImageUrls

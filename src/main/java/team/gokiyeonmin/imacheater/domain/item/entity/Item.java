@@ -179,6 +179,10 @@ public class Item {
         this.itemImages.removeIf(image -> image.getId().equals(itemImageId));
     }
 
+    public void setItemImages(List<ItemImage> itemImages) {
+        this.itemImages = itemImages;
+    }
+
 //    public void updateImage(Long itemImageId, String newUrl) {
 //        this.itemImages.stream()
 //                .filter(image -> image.getId().equals(itemImageId))
