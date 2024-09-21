@@ -10,6 +10,7 @@ import team.gokiyeonmin.imacheater.domain.Direction;
 import team.gokiyeonmin.imacheater.domain.item.Door;
 import team.gokiyeonmin.imacheater.domain.item.dto.req.ItemEnrollRequest;
 import team.gokiyeonmin.imacheater.domain.item.dto.req.ItemUpdateRequest;
+import team.gokiyeonmin.imacheater.domain.item.dto.res.ItemImagesResponse;
 import team.gokiyeonmin.imacheater.domain.item.dto.res.ItemResponse;
 import team.gokiyeonmin.imacheater.domain.item.dto.res.ItemSimpleResponse;
 import team.gokiyeonmin.imacheater.domain.item.service.ItemService;
@@ -74,6 +75,14 @@ public class ItemController {
     ) {
         ItemResponse itemResponse = itemService.getItem(itemId);
         return ResponseEntity.ok(itemResponse);
+    }
+
+    @GetMapping("/api/items/{itemId}/images")
+    public ResponseEntity<ItemImagesResponse> getItemImages(
+            @PathVariable Long itemId
+    ) {
+        ItemImagesResponse itemImageResponse = itemService.getItemImages(itemId);
+        return ResponseEntity.ok(itemImageResponse);
     }
 
     @PutMapping("/api/items/{itemId}")

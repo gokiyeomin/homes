@@ -9,6 +9,7 @@ import team.gokiyeonmin.imacheater.domain.Direction;
 import team.gokiyeonmin.imacheater.domain.item.Door;
 import team.gokiyeonmin.imacheater.domain.item.dto.req.ItemEnrollRequest;
 import team.gokiyeonmin.imacheater.domain.item.dto.req.ItemUpdateRequest;
+import team.gokiyeonmin.imacheater.domain.item.dto.res.ItemImagesResponse;
 import team.gokiyeonmin.imacheater.domain.item.dto.res.ItemResponse;
 import team.gokiyeonmin.imacheater.domain.item.dto.res.ItemSimpleResponse;
 import team.gokiyeonmin.imacheater.domain.item.entity.Item;
@@ -86,6 +87,15 @@ public class ItemService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
 
         return ItemResponse.fromEntity(item);
+    }
+
+    @Transactional(readOnly = true)
+    public ItemImagesResponse getItemImages(Long itemId) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
+
+        List<ItemImage> itemImages = item.getItemImages();
+        return ItemImagesResponse.fromEntity(itemImages);
     }
 
     @Transactional(readOnly = true)

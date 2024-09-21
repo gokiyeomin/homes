@@ -8,11 +8,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import team.gokiyeonmin.imacheater.domain.Direction;
 import team.gokiyeonmin.imacheater.domain.item.Door;
 import team.gokiyeonmin.imacheater.domain.item.entity.Item;
-import team.gokiyeonmin.imacheater.domain.item.entity.ItemImage;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Schema(description = "매물 정보 응답")
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
@@ -30,10 +28,6 @@ public record ItemResponse(
         @JsonProperty("createdAt")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime createdAt,
-
-        @Schema(description = "게시글 이미지Url 리스트")
-        @JsonProperty("images")
-        List<String> images,
 
         @Schema(description = "글 제목", example = "서울 강남구 아파트")
         @JsonProperty("title")
@@ -108,10 +102,6 @@ public record ItemResponse(
 ) {
 
     public static ItemResponse fromEntity(Item item) {
-        List<String> imageUrls = item.getItemImages().stream()
-            .map(ItemImage::getUrl)
-            .toList();
-
         // 유저 프로필 이미지 URL
         String userImageUrl = (item.getUser().getUserImage() != null)
                 ? item.getUser().getUserImage().getUrl()
@@ -121,7 +111,6 @@ public record ItemResponse(
         return new ItemResponse(
                 item.getId(),
                 item.getCreatedAt(),
-                imageUrls,
                 item.getTitle(),
                 item.getContent(),
                 item.getAddress(),
