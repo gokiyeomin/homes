@@ -31,9 +31,9 @@ public record ItemResponse(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime createdAt,
 
-        @Schema(description = "게시글 이미지 리스트")
+        @Schema(description = "게시글 이미지Url 리스트")
         @JsonProperty("images")
-        List<ItemImageResponse> images,
+        List<String> images,
 
         @Schema(description = "글 제목", example = "서울 강남구 아파트")
         @JsonProperty("title")
@@ -100,7 +100,7 @@ public record ItemResponse(
 
         @Schema(description = "유저 이미지", example = "https://example.com/profile.jpg")
         @JsonProperty("userImage")
-        String userImageUrl,
+        String userImage,
 
         @Schema(description = "유저 닉네임", example = "고기여민")
         @JsonProperty("nickname")
@@ -108,9 +108,9 @@ public record ItemResponse(
 ) {
 
     public static ItemResponse fromEntity(Item item) {
-        List<ItemImageResponse> imageResponses = item.getItemImages().stream()
-                .map(ItemImageResponse::fromEntity)
-                .toList();
+        List<String> imageUrls = item.getItemImages().stream()
+            .map(ItemImage::getUrl)
+            .toList();
 
         // 유저 프로필 이미지 URL
         String userImageUrl = (item.getUser().getUserImage() != null)
@@ -121,7 +121,7 @@ public record ItemResponse(
         return new ItemResponse(
                 item.getId(),
                 item.getCreatedAt(),
-                imageResponses,
+                imageUrls,
                 item.getTitle(),
                 item.getContent(),
                 item.getAddress(),

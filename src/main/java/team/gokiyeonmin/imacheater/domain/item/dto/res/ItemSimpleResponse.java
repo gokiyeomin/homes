@@ -50,10 +50,10 @@ public record ItemSimpleResponse(
 ) {
 
     public static ItemSimpleResponse fromEntity(Item item) {
-        ItemImageResponse thumbnail = item.getItemImages().stream()
+        String thumbnailUrl = item.getItemImages().stream()
                 .filter(ItemImage::getIsThumbnail)
                 .findFirst()
-                .map(ItemImageResponse::fromEntity)
+                .map(ItemImage::getUrl)
                 .orElse(null);
 
 //        String userImageUrl = (item.getUser().getUserImage() != null)
@@ -65,7 +65,7 @@ public record ItemSimpleResponse(
                 item.getCreatedAt(),
                 item.getTitle(),
                 item.getContent(),
-                thumbnail == null ? null : thumbnail.url(),
+                thumbnailUrl,
                 item.getMoveInDate(),
                 item.getIsSold()
         );
