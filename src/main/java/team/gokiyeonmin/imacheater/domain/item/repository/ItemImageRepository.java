@@ -6,5 +6,5 @@ import team.gokiyeonmin.imacheater.domain.item.entity.ItemImage;
 import java.util.Optional;
 
 public interface ItemImageRepository extends JpaRepository<ItemImage, Long> {
-    Optional<ItemImage> findByImageUrl(String imageUrl);
+    Optional<ItemImage> findByUrl(String url);
 }
