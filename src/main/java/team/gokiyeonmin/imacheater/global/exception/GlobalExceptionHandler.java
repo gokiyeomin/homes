@@ -1,6 +1,5 @@
 package team.gokiyeonmin.imacheater.global.exception;
 
-import jakarta.persistence.ElementCollection;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -8,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 @Slf4j
 @RestControllerAdvice
@@ -17,6 +17,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> missingServletRequestParameterExceptionHandler(MissingServletRequestParameterException e) {
         log.error("Missing Servlet Request Parameter Exception: {}", e.getMessage());
         System.out.println("Missing Servlet Request Parameter Exception: " + e.getMessage());
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.MISSING_REQUEST_PARAMETER);
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    public ResponseEntity<ErrorResponse> missingServletRequestPartExceptionHandler(MissingServletRequestPartException e) {
+        log.error("Missing Servlet Request Part Exception: {}", e.getMessage());
+        System.out.println("Missing Servlet Request Part Exception: " + e.getMessage());
         final ErrorResponse response = ErrorResponse.of(ErrorCode.MISSING_REQUEST_PARAMETER);
         return ResponseEntity.badRequest().body(response);
     }
