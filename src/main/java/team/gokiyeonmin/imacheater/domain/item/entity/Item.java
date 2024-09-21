@@ -74,7 +74,7 @@ public class Item {
     private Direction windowDirection;
 
     @Column(name = "is_sold", nullable = false)
-    private Boolean isSold = false;
+    private Boolean isSold;
 
     /* -------------------------------------------- */
     /* -------------- Relation Column ------------- */
@@ -119,6 +119,7 @@ public class Item {
         this.windowDirection = windowDirection;
         this.user = user;
         this.createdAt = LocalDateTime.now();
+        this.isSold = false;
     }
 
     // 뭘 업데이트 가능하게 할건지?
