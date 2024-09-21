@@ -80,6 +80,6 @@ public record ItemUpdateRequest(
 
         @JsonProperty("deletedImageUrls")
         @Schema(description = "삭제된 이미지 Url들", example = "[https://imageCdnAddress.com/folder/imageName.jpg]")
-        List<Long> deletedImageIds
+        List<Long> deletedImageUrls
 ) {
 }

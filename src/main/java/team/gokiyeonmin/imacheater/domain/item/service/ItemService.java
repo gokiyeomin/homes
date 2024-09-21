@@ -107,17 +107,17 @@ public class ItemService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
 
         // 2. 삭제된 이미지 처리
-        List<Long> deletedImageIds = request.deletedImageIds();
-        if (deletedImageIds != null) {
-            for (Long imageId : deletedImageIds) {
+        List<Long> deletedImageUrls = request .deletedImageUrls();
+        if (deletedImageUrls != null) {
+            for (Long imageId : deletedImageUrls) {
                 item.removeImage(imageId);
                 itemImageRepository.deleteById(imageId);
             }
         }
 
         // 2. 삭제된 이미지 처리
-        if (deletedImageIds != null) {
-            for (Long imageId : deletedImageIds) {
+        if (deletedImageUrls != null) {
+            for (Long imageId : deletedImageUrls) {
                 // 삭제할 이미지 가져오기
                 ItemImage itemImage = item.getItemImages().stream()
                         .filter(image -> image.getId().equals(imageId))
