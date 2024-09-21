@@ -33,7 +33,7 @@ public record ItemSimpleResponse(
 
         @Schema(description = "게시글 썸네일 이미지")
         @JsonProperty("thumbnail")
-        ItemImageResponse thumbnail,
+        String thumbnail,
 
 //        @Schema(description = "유저 이미지", example = "https://example.com/profile.jpg")
 //        @JsonProperty("userImage")
@@ -65,8 +65,7 @@ public record ItemSimpleResponse(
                 item.getCreatedAt(),
                 item.getTitle(),
                 item.getContent(),
-                thumbnail,
-//                userImageUrl,
+                thumbnail == null ? null : thumbnail.url(),
                 item.getMoveInDate(),
                 item.getIsSold()
         );
