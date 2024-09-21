@@ -25,6 +25,7 @@ public record ChatRoomsResponse(
                     return ChatRoomDto.of(
                             chatRoom.getId(),
                             chatRoom.getTitle(),
+                            chatRoom.getItem().getName(),
                             chatRoom.getPreview(),
                             chatRoom.getUnreadCount(user),
                             user
@@ -41,9 +42,13 @@ public record ChatRoomsResponse(
             @JsonProperty("chatRoomId")
             Long id,
 
-            @Schema(description = "매물 이름")
+            @Schema(description = "매물 제목")
             @JsonProperty("title")
             String title,
+
+            @Schema(description = "매물 이름")
+            @JsonProperty("name")
+            String name,
 
             @Schema(description = "채팅방 미리보기")
             @JsonProperty("preview")
@@ -64,6 +69,7 @@ public record ChatRoomsResponse(
 
         static ChatRoomDto of(
                 Long chatRoomId,
+                String title,
                 String name,
                 String preview,
                 Integer unreadCount,
@@ -71,6 +77,7 @@ public record ChatRoomsResponse(
         ) {
             return new ChatRoomDto(
                     chatRoomId,
+                    title,
                     name,
                     preview,
                     unreadCount,
