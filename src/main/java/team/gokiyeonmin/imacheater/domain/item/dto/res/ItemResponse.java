@@ -17,6 +17,11 @@ import java.util.List;
 @Schema(description = "매물 정보 응답")
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public record ItemResponse(
+
+        // *******************
+        //     매물 게시글 관련
+        // *******************
+
         @Schema(description = "매물 id", example = "52")
         @JsonProperty("id")
         Long id,
@@ -25,14 +30,6 @@ public record ItemResponse(
         @JsonProperty("createdAt")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime createdAt,
-
-        @Schema(description = "유저 이미지", example = "https://example.com/profile.jpg")
-        @JsonProperty("userImage")
-        String userImageUrl,
-
-        @Schema(description = "유저 닉네임", example = "고기여민")
-        @JsonProperty("nickname")
-        String nickname,
 
         @Schema(description = "게시글 이미지 리스트")
         @JsonProperty("images")
@@ -90,7 +87,24 @@ public record ItemResponse(
 
         @Schema(description = "거래 완료 여부", example = "true")
         @JsonProperty("isSold")
-        Boolean isSold
+        Boolean isSold,
+
+
+        // *******************
+        //     작성자 관련
+        // *******************
+
+        @Schema(description = "유저 id", example = "52")
+        @JsonProperty("userId")
+        Long userId,
+
+        @Schema(description = "유저 이미지", example = "https://example.com/profile.jpg")
+        @JsonProperty("userImage")
+        String userImageUrl,
+
+        @Schema(description = "유저 닉네임", example = "고기여민")
+        @JsonProperty("nickname")
+        String nickname
 ) {
 
     public static ItemResponse fromEntity(Item item) {
@@ -107,8 +121,6 @@ public record ItemResponse(
         return new ItemResponse(
                 item.getId(),
                 item.getCreatedAt(),
-                userImageUrl,
-                item.getUser().getNickname(),
                 imageResponses,
                 item.getTitle(),
                 item.getContent(),
@@ -122,7 +134,10 @@ public record ItemResponse(
                 item.getFloor(),
                 item.getRoomCount(),
                 item.getWindowDirection(),
-                item.getIsSold()
+                item.getIsSold(),
+                item.getUser().getId(),
+                userImageUrl,
+                item.getUser().getNickname()
         );
     }
 }
