@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
+import java.util.Arrays;
+
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -25,6 +27,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> missingServletRequestPartExceptionHandler(MissingServletRequestPartException e) {
         log.error("Missing Servlet Request Part Exception: {}", e.getMessage());
         System.out.println("Missing Servlet Request Part Exception: " + e.getMessage());
+        System.out.println("e.getDetailMessageArguments() = " + Arrays.toString(e.getDetailMessageArguments()));
         final ErrorResponse response = ErrorResponse.of(ErrorCode.MISSING_REQUEST_PARAMETER);
         return ResponseEntity.badRequest().body(response);
     }
