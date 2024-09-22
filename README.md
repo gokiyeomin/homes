@@ -79,16 +79,13 @@
 ### 구현 방식
 
 #### 📌 frontend
-- **사용 프레임워크**: Dart, Flutter
-<img src="https://shields.io/badge/Dart-0175C2?style=flat-square&logo=Dart&logoColor=white" />
-<img src="https://shields.io/badge/Flutter-02569B?style=flat-square&logo=Flutter&logoColor=white" />
+- **사용 프레임워크**: Dart, Flutter <img src="https://shields.io/badge/Dart-0175C2?style=flat-square&logo=Dart&logoColor=white" /> <img src="https://shields.io/badge/Flutter-02569B?style=flat-square&logo=Flutter&logoColor=white" />
 
 - **디자인 도구**: Figma <img src="https://shields.io/badge/Figma-F24E1E?style=flat-square&logo=Figma&logoColor=white" />
 
 
 #### 📌 backend 
-- **사용 프레임워크**: Java, Spring Boot <img src="https://img.shields.io/badge/Java-007396?style=flat-square&logo=java&logoColor=white"/>
-<img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=flat-square&logo=springboot&logoColor=white">
+- **사용 프레임워크**: Java, Spring Boot <img src="https://img.shields.io/badge/Java-007396?style=flat-square&logo=java&logoColor=white"/> <img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=flat-square&logo=springboot&logoColor=white">
 
 - **데이터베이스**: MySQL <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=MySQL&logoColor=white"/>
    - 매물, 사용자 정보, 채팅 로그 등을 저장 및 관리한다.
@@ -96,16 +93,14 @@
 - **매물 검색**: Spring Data JPA Specification <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white"/>
   - 동적 쿼리를 작성해 데이터베이스에서 원하는 데이터를 효율적으로 조회한다.
 
-- **이미지 파일 저장**: AWS S3
-<img src="https://img.shields.io/badge/AmazonS3-569A31?style=flat-square&logo=AmazonS3&logoColor=white"/>
+- **이미지 파일 저장**: AWS S3 <img src="https://img.shields.io/badge/AmazonS3-569A31?style=flat-square&logo=AmazonS3&logoColor=white"/>
    - 업로드된 이미지들은 S3 버킷을 통해 저장 및 호스팅된다.
 
    </br>
 
 
 #### ⛓️ 보안
-- **사용 기술**: JWT, Spring Security <img src="https://img.shields.io/badge/JSON Web Tokens-000000?style=flat-square&logo=jsonwebtokens&logoColor=white"/>
-<img src="https://img.shields.io/badge/SpringSecurity-6DB33F?style=flat-square&logo=SpringSecurity&logoColor=white"/>
+- **사용 기술**: JWT, Spring Security <img src="https://img.shields.io/badge/JSON Web Tokens-000000?style=flat-square&logo=jsonwebtokens&logoColor=white"/> <img src="https://img.shields.io/badge/SpringSecurity-6DB33F?style=flat-square&logo=SpringSecurity&logoColor=white"/>
   - JWT 토큰을 이용해 유저 인증 및 인가 과정을 안전하게 구현하고, 특정 리소스에 대한 접근 권한을 관리한다.
 
   </br>
@@ -121,10 +116,8 @@
   - API 문서를 자동으로 생성한다. GithubActions과의 연동을 통해, API 문서가 항상 최신 상태로 유지된다.
 
 #### 🖥️ 배포
-- **서버**: AWS EC2
-<img src="https://img.shields.io/badge/AmazonS2-FF9900?style=flat-square&logo=amazonec2&logoColor=white"/>
-- **CI/CD**: GitHub Actions
-<img src="https://img.shields.io/badge/GithubActions-2088FF?style=flat-square&logo=githubactions&logoColor=white">
+- **서버**: AWS EC2 <img src="https://img.shields.io/badge/AmazonS2-FF9900?style=flat-square&logo=amazonec2&logoColor=white"/>
+- **CI/CD**: GitHub Actions <img src="https://img.shields.io/badge/GithubActions-2088FF?style=flat-square&logo=githubactions&logoColor=white">
   - 코드 푸시나 PR 머지 등의 이벤트에 따라 **GitHub Actions**가 트리거되어 **자동으로 빌드 및 배포**가 이루어진다. 이로 인해 개발 워크플로우가 자동화되어, 코드 변경이 있을 때마다 빠르게 배포할 수 있다.
   - 지속적 통합/배포 자동화를 구현한다.
 
