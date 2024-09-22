@@ -203,12 +203,12 @@ public class ItemService {
     public void deleteItem(Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ITEM));
-//        List<ItemImage> itemImages = item.getItemImages();
+        List<ItemImage> itemImages = item.getItemImages();
 //
 //        for (ItemImage image : itemImages) {
 //            s3Util.deleteImage(image.getUrl());  // S3에서 해당 이미지 삭제
 //        }
-//        itemImageRepository.deleteAll(itemImages);  // 관련된 이미지들 DB에서 삭제
+        itemImageRepository.deleteAll(itemImages);  // 관련된 이미지들 DB에서 삭제
 
         itemRepository.delete(item);
     }
