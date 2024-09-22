@@ -107,6 +107,7 @@ public class ItemController {
     public ResponseEntity<Void> deleteItem(
             @PathVariable Long itemId
     ) {
+        System.out.println("itemId = " + itemId);
         itemService.deleteItem(itemId);
         return ResponseEntity.noContent().build();
     }
