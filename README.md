@@ -111,8 +111,7 @@
 - **사용 기술**: WebSocket, STOMP, SockJS
   - WebSocket을 사용하여 실시간 채팅 기능을 구현한다.
   - 이 때 STOMP 프로토콜을 사용하여 클라이언트 간 메시지 송수신 처리를 한다.
-- **API 문서화**: Swagger
-<img src="https://img.shields.io/badge/Swagger-85EA2D?style=flat-square&logo=Swagger&logoColor=white"/>
+- **API 문서화**: Swagger<img src="https://img.shields.io/badge/Swagger-85EA2D?style=flat-square&logo=Swagger&logoColor=white"/>
   - API 문서를 자동으로 생성한다. GithubActions과의 연동을 통해, API 문서가 항상 최신 상태로 유지된다.
 
 #### 🖥️ 배포
